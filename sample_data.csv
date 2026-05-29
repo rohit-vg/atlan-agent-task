@@ -1,0 +1,201 @@
+order_id,customer_id,customer_email,customer_name,customer_phone,customer_city,customer_country,order_date,shipped_date,delivery_date,product_id,product_name,category,quantity,unit_price_usd,discount_pct,total_amount_usd,payment_method,order_status,is_returned
+ORD-000001,CUST-1383,david.anderson95@gmail.com,David Anderson,+1-717-716-1434,Tokyo,FR,2023-04-25,,,PROD-833,Premium Gadget 29,Sports,4,141.14,0.0,564.56,paypal,cancelled,1
+ORD-000002,CUST-3988,carol.davis13@gmail.com,Carol Davis,+1-327-487-2291,Tokyo,IN,2023-01-07,2023-01-09,2023-01-16,PROD-949,Basic Gadget 46,Electronics,4,142.55,0.13,496.07,credit_card,shipped,0
+ORD-000003,CUST-1700,leo.miller27@gmail.com,Leo Miller,+1-450-267-8573,Sydney,IN,2023-08-22,2023-08-23,2023-08-26,PROD-755,Ultra Gizmo 50,Toys,8,193.16,0.15,1313.49,credit_card,completed,0
+ORD-000004,CUST-3207,pete.davis83@gmail.com,Pete Davis,+1-798-538-7543,Toronto,FR,2023-08-23,2023-08-30,2023-09-05,PROD-241,Premium Widget 49,Electronics,10,37.76,0.13,328.51,credit_card,processing,0
+ORD-000005,CUST-4075,iris.moore2@gmail.com,Iris Moore,+1-856-448-2827,Mumbai,AU,2023-06-06,2023-06-13,2023-06-24,PROD-261,Premium Widget 47,Beauty,7,36.45,0.19,206.67,paypal,returned,1
+ORD-000006,CUST-4805,frank.moore68@gmail.com,Frank Moore,+1-514-345-1949,Paris,NG,2024-05-27,2024-06-01,2024-06-13,PROD-180,Pro Device 5,Toys,9,-12.99,0.06,1292.1,crypto,cancelled,1
+ORD-000007,CUST-3751,grace.harris70@gmail.com,Grace Harris,+1-648-629-8397,London,FR,2023-05-09,2023-05-13,2023-05-17,PROD-330,Pro Gizmo 2,Sports,10,136.2,0.0,1362.0,crypto,shipped,0
+ORD-000008,CUST-1541,bob.white43@yahoo.com,Bob White,+1-784-690-8744,Paris,BR,2023-08-24,2023-08-25,,PROD-926,Premium Gadget 7,Electronics,4,317.4,0.0,1269.6,bank_transfer,cancelled,0
+ORD-000009,CUST-1751,karen.jackson14@yahoo.com,Karen Jackson,+1-455-995-2235,São Paulo,JP,2023-12-29,2024-01-02,2024-01-04,PROD-200,Pro Widget 6,Toys,2,338.32,0.0,676.64,debit_card,cancelled,0
+ORD-000010,CUST-3711,mia.jones59@yahoo.com,Mia Jones,+1-358-294-5861,Paris,US,2023-06-20,2023-06-24,2023-07-02,PROD-693,Pro Gizmo 4,Electronics,3,451.71,0.0,1355.13,crypto,returned,1
+ORD-000011,CUST-2008,carol.anderson31@gmail.com,Carol Anderson,+1-240-734-2343,Sydney,NG,2024-05-03,2024-05-10,2024-05-12,PROD-678,Basic Gizmo 14,Beauty,2,480.59,0.03,932.34,paypal,returned,1
+ORD-000012,CUST-2429,tina.taylor13@yahoo.com,Tina Taylor,+1-450-478-5669,Berlin,BR,2023-09-02,2023-09-04,2023-09-10,PROD-953,Basic Widget 43,Toys,2,231.33,0.0,462.66,crypto,shipped,0
+ORD-000013,CUST-2028,jack.taylor27@gmail.com,Jack Taylor,+1-252-194-7939,Mumbai,US,2023-11-03,2023-11-04,2023-11-08,PROD-103,Basic Gadget 41,Home & Garden,2,135.91,0.06,255.51,debit_card,shipped,0
+ORD-000014,CUST-4260,INVALID_EMAIL,Sam Moore,+1-240-466-4441,,FR,2024-03-28,2024-04-01,2024-04-04,PROD-782,Pro Gizmo 50,Sports,3,42.25,0.33,84.92,bank_transfer,shipped,0
+ORD-000015,CUST-4225,karen.jackson53@gmail.com,Karen Jackson,+1-591-993-1634,São Paulo,FR,2023-06-08,2023-06-10,2023-06-24,PROD-304,Premium Gizmo 20,Toys,7,406.33,0.0,2844.31,debit_card,processing,0
+ORD-000016,CUST-2356,carol.jackson36@gmail.com,Carol Jackson,+1-318-998-5279,Berlin,NG,2023-08-17,,,PROD-371,Pro Widget 39,Books,6,100.6,0.0,603.6,paypal,returned,1
+ORD-000017,CUST-1286,noah.smith67@gmail.com,Noah Smith,+1-538-738-6143,,UK,2023-11-18,2023-11-23,,PROD-837,Basic Gizmo 43,Books,4,450.25,0.0,1801.0,paypal,processing,0
+ORD-000018,CUST-2760,tina.taylor39@gmail.com,Tina Taylor,+1-821-770-6279,São Paulo,BR,2024-02-17,2024-02-22,,PROD-552,Ultra Device 48,Clothing,7,213.12,0.36,954.78,credit_card,shipped,0
+ORD-000019,CUST-4480,grace.williams4@yahoo.com,Grace Williams,+1-666-524-4185,,AU,2023-10-18,2023-10-24,2023-10-27,PROD-606,Premium Gadget 10,Beauty,4,410.12,0.09,1492.84,credit_card,returned,1
+ORD-000020,CUST-3289,rita.brown16@gmail.com,Rita Brown,+1-973-553-9270,Sydney,JP,2023-04-20,2023-04-22,,PROD-556,Ultra Device 29,Home & Garden,9,479.19,0.0,4312.71,debit_card,returned,1
+ORD-000021,CUST-3893,karen.miller70@yahoo.com,Karen Miller,+1-624-517-6421,Tokyo,BR,2023-10-11,2023-10-16,2023-10-21,PROD-525,Pro Gadget 27,Books,2,140.93,0.09,256.49,crypto,cancelled,0
+ORD-000022,CUST-4677,mia.white54@gmail.com,Mia White,+1-424-379-8140,São Paulo,US,2023-01-21,2023-01-28,2023-02-06,PROD-498,Basic Device 47,Clothing,6,7.92,0.0,47.52,bank_transfer,returned,1
+ORD-000023,CUST-2338,noah.williams60@yahoo.com,Noah Williams,+1-588-384-7906,Mumbai,UK,2023-05-11,2023-05-16,,PROD-581,Pro Widget 23,Clothing,10,200.04,0.03,1940.39,credit_card,shipped,0
+ORD-000024,CUST-1687,pete.anderson15@gmail.com,Pete Anderson,+1-965-835-2876,Berlin,IN,2023-02-11,2023-02-13,,PROD-210,Pro Gizmo 37,Beauty,3,15.09,0.0,45.27,bank_transfer,shipped,0
+ORD-000025,CUST-4205,jack.white88@gmail.com,Jack White,,Tokyo,AU,2024-02-11,2024-02-13,,PROD-777,Basic Widget 33,Beauty,4,346.85,0.0,1387.4,paypal,returned,1
+ORD-000026,CUST-4382,quinn.anderson35@gmail.com,Quinn Anderson,+1-474-430-5022,London,IN,2023-01-13,2023-01-20,2023-01-28,PROD-561,Ultra Device 37,Sports,8,480.59,0.17,3191.12,bank_transfer,cancelled,0
+ORD-000027,CUST-3116,leo.jackson34@gmail.com,Leo Jackson,+1-287-347-7658,São Paulo,JP,2023-12-11,,,PROD-876,Ultra Device 42,Beauty,3,426.22,0.0,1278.66,bank_transfer,shipped,0
+ORD-000028,CUST-2858,rita.moore45@gmail.com,Rita Moore,+1-457-336-2976,,FR,2024-04-03,2024-04-04,2024-04-12,PROD-423,Pro Gadget 13,Clothing,5,347.43,0.15,1476.58,bank_transfer,shipped,0
+ORD-000029,CUST-1223,leo.williams39@yahoo.com,Leo Williams,+1-914-229-9042,London,US,2023-10-11,2023-10-18,2023-10-24,PROD-687,Basic Device 31,Books,4,490.35,0.0,1961.4,paypal,shipped,1
+ORD-000030,CUST-4887,carol.taylor81@gmail.com,Carol Taylor,+1-454-221-7818,Lagos,NG,2023-07-08,2023-07-11,2023-07-20,PROD-909,Ultra Device 29,Books,2,61.47,0.0,122.94,paypal,returned,1
+ORD-000031,CUST-1307,grace.jones85@yahoo.com,Grace Jones,+1-618-561-8699,Mumbai,US,2024-03-15,2024-03-20,,PROD-337,Basic Gizmo 45,Toys,2,480.25,0.08,883.66,bank_transfer,returned,1
+ORD-000032,CUST-1679,rita.brown83@yahoo.com,Rita Brown,+1-809-866-5728,São Paulo,UK,2023-03-14,2023-03-17,2023-03-29,PROD-579,Basic Device 18,Sports,4,296.95,0.0,1187.8,crypto,processing,0
+ORD-000033,CUST-4125,INVALID_EMAIL,Hank Anderson,+1-681-631-8245,Mumbai,DE,2024-05-20,2024-05-25,,PROD-699,Premium Device 6,Books,6,218.85,0.01,1299.97,paypal,shipped,0
+ORD-000034,CUST-1474,mia.white98@gmail.com,Mia White,+1-613-985-9431,New York,JP,2024-02-23,2024-02-29,,PROD-573,Premium Widget 13,Sports,7,84.61,0.12,521.2,paypal,shipped,0
+ORD-000035,CUST-2272,pete.johnson4@gmail.com,Pete Johnson,+1-765-517-2527,Paris,UK,2024-05-25,2024-06-01,,PROD-572,Pro Gadget 32,Beauty,3,137.19,0.18,337.49,paypal,processing,0
+ORD-000036,CUST-4235,grace.harris77@gmail.com,Grace Harris,+1-548-906-9318,Mumbai,US,2024-06-05,2024-06-09,2024-06-18,PROD-389,Basic Device 10,Books,9,125.65,0.0,1130.85,crypto,completed,0
+ORD-000037,CUST-2937,hank.taylor50@yahoo.com,Hank Taylor,+1-590-495-3492,São Paulo,US,2024-05-10,2024-05-15,2024-05-23,PROD-229,Basic Widget 29,Electronics,6,230.4,0.39,843.26,crypto,completed,0
+ORD-000038,CUST-4519,iris.miller80@gmail.com,Iris Miller,+1-524-741-8994,Tokyo,US,2024-04-12,,,PROD-732,Pro Gadget 41,Beauty,3,76.36,0.0,229.08,paypal,shipped,0
+ORD-000039,CUST-2764,jack.harris4@yahoo.com,Jack Harris,,Tokyo,AU,2023-08-21,2023-08-25,2023-09-08,PROD-679,Ultra Gadget 12,Electronics,2,318.71,0.0,637.42,crypto,shipped,0
+ORD-000040,CUST-4871,alice.harris60@gmail.com,Alice Harris,+1-801-406-7951,,IN,2024-01-27,2024-01-29,2024-02-09,PROD-567,Basic Gadget 25,Toys,8,75.84,0.18,497.51,bank_transfer,processing,0
+ORD-000041,CUST-4052,mia.jones2@gmail.com,Mia Jones,+1-493-894-4770,Lagos,CA,2023-04-20,2023-04-25,2023-05-01,PROD-324,Ultra Gizmo 44,Toys,5,496.38,0.0,2481.9,debit_card,completed,0
+ORD-000042,CUST-3209,carol.harris38@gmail.com,Carol Harris,+1-574-643-9221,Mumbai,DE,2023-04-10,2023-04-16,,PROD-363,Premium Gizmo 48,Toys,1,395.36,0.29,280.71,paypal,processing,0
+ORD-000043,CUST-4067,leo.johnson51@yahoo.com,Leo Johnson,+1-798-490-7086,London,FR,2023-04-28,2023-04-29,,PROD-582,Pro Gizmo 40,Clothing,7,483.42,0.32,2301.08,credit_card,cancelled,0
+ORD-000044,CUST-3746,pete.johnson13@yahoo.com,Pete Johnson,+1-913-653-7866,Lagos,DE,2024-04-20,2024-04-23,2024-04-26,PROD-524,Pro Device 40,Books,1,74.19,0.0,74.19,paypal,cancelled,0
+ORD-000045,CUST-1868,leo.smith51@yahoo.com,Leo Smith,+1-811-121-1828,Toronto,FR,2023-02-03,2023-02-05,2023-02-10,PROD-228,Ultra Widget 49,Sports,2,428.45,0.15,728.37,debit_card,cancelled,0
+ORD-000046,CUST-2467,emma.williams70@yahoo.com,Emma Williams,+1-443-702-6304,New York,DE,2023-08-10,2023-08-12,2023-08-16,PROD-371,Pro Gadget 48,Books,10,395.38,0.0,3953.8,crypto,completed,0
+ORD-000047,CUST-2235,hank.taylor6@gmail.com,Hank Taylor,+1-231-162-8847,Sydney,AU,2023-04-27,2023-05-01,2023-05-08,PROD-802,Pro Device 46,Books,2,259.05,0.0,518.1,credit_card,returned,1
+ORD-000048,CUST-1468,tina.moore38@gmail.com,Tina Moore,+1-866-998-4522,Sydney,BR,2023-03-24,2023-03-26,,PROD-333,Premium Gizmo 30,Books,10,141.13,0.13,1227.83,bank_transfer,completed,0
+ORD-000049,CUST-3402,carol.johnson56@yahoo.com,Carol Johnson,+1-775-437-3002,Sydney,CA,2023-04-08,2023-04-11,2023-04-18,PROD-994,Premium Widget 19,Sports,8,477.03,0.0,3816.24,paypal,processing,0
+ORD-000050,CUST-4991,rita.miller15@gmail.com,Rita Miller,+1-836-728-1430,Lagos,IN,2023-12-27,2024-01-01,2024-01-13,PROD-129,Ultra Gizmo 45,Toys,2,243.68,0.0,487.36,paypal,cancelled,0
+ORD-000051,CUST-2515,alice.johnson96@gmail.com,Alice Johnson,+1-532-895-2391,New York,DE,2023-12-14,2023-12-16,2023-12-27,PROD-261,Pro Widget 18,Books,2,330.39,0.0,660.78,bank_transfer,cancelled,0
+ORD-000052,CUST-2618,jack.anderson87@gmail.com,Jack Anderson,+1-256-107-4349,Mumbai,FR,2024-05-12,2024-05-16,2024-05-30,PROD-885,Ultra Gizmo 19,Home & Garden,6,258.61,0.0,1551.66,credit_card,shipped,1
+ORD-000053,CUST-1318,INVALID_EMAIL,Leo Johnson,+1-789-539-7626,,AU,2023-01-08,2023-01-12,,PROD-396,Pro Device 2,Home & Garden,4,193.2,0.33,517.78,debit_card,completed,0
+ORD-000054,CUST-4191,mia.moore11@gmail.com,Mia Moore,+1-722-748-2868,Tokyo,JP,2024-04-16,2024-04-19,,PROD-298,Basic Gizmo 47,Toys,4,423.02,0.0,1692.08,debit_card,shipped,0
+ORD-000055,CUST-3633,pete.wilson97@gmail.com,Pete Wilson,+1-839-430-6179,Berlin,BR,2023-08-30,2023-09-02,,PROD-169,Premium Device 41,Home & Garden,2,303.19,0.0,606.38,paypal,returned,1
+ORD-000056,CUST-4908,carol.taylor77@gmail.com,Carol Taylor,+1-242-560-4084,Toronto,NG,2023-02-27,2023-02-28,2023-03-09,PROD-587,Ultra Widget 29,Electronics,6,23.62,0.03,137.47,paypal,returned,1
+ORD-000057,CUST-1214,leo.miller37@gmail.com,Leo Miller,+1-862-442-2079,Toronto,UK,2023-03-28,2023-03-30,,PROD-671,Premium Gizmo 17,Beauty,8,355.27,0.24,2160.04,crypto,returned,1
+ORD-000058,CUST-4395,carol.jones72@gmail.com,Carol Jones,+1-901-639-2531,,AU,2023-06-03,2023-06-08,2023-06-15,PROD-620,Basic Widget 24,Home & Garden,7,158.56,0.0,1109.92,debit_card,processing,0
+ORD-000059,CUST-1154,david.moore99@gmail.com,David Moore,+1-984-732-3147,Lagos,AU,2023-08-08,2023-08-15,2023-08-20,PROD-257,Ultra Gadget 45,Toys,3,499.99,0.0,1499.97,crypto,returned,1
+ORD-000060,CUST-1794,olivia.brown69@yahoo.com,Olivia Brown,+1-784-551-8564,Mumbai,AU,2023-06-19,2023-06-20,2023-07-02,PROD-614,Premium Gadget 13,Toys,8,361.19,0.3,2022.66,crypto,cancelled,0
+ORD-000061,CUST-1603,david.jones11@gmail.com,David Jones,+1-293-327-8391,Toronto,US,2023-05-22,2023-05-23,2023-05-30,PROD-524,Pro Device 33,Home & Garden,2,279.5,0.21,441.61,debit_card,returned,1
+ORD-000062,CUST-1021,jack.harris61@gmail.com,Jack Harris,+1-219-362-4533,Berlin,JP,2024-01-31,2024-02-03,2024-02-10,PROD-844,Premium Widget 50,Home & Garden,6,465.76,0.06,2626.89,debit_card,cancelled,0
+ORD-000063,CUST-2193,pete.taylor69@yahoo.com,Pete Taylor,+1-829-461-4941,Lagos,AU,2023-11-05,2023-11-07,2023-11-21,PROD-291,Pro Gizmo 5,Sports,2,313.29,0.0,626.58,crypto,processing,0
+ORD-000064,CUST-3573,iris.thomas3@gmail.com,Iris Thomas,,Lagos,CA,2024-06-03,2024-06-08,2024-06-16,PROD-236,Pro Gizmo 35,Home & Garden,1,437.3,0.39,266.75,debit_card,processing,0
+ORD-000065,CUST-4339,grace.smith26@gmail.com,Grace Smith,+1-459-137-4131,Mumbai,CA,2024-04-20,2024-04-24,2024-05-08,PROD-982,Pro Gizmo 18,Electronics,8,71.75,0.0,574.0,paypal,shipped,0
+ORD-000066,CUST-3467,pete.miller67@yahoo.com,Pete Miller,+1-384-658-5813,Toronto,UK,2024-03-23,2024-03-29,2024-04-06,PROD-181,Basic Gizmo 20,Books,3,172.82,0.0,518.46,crypto,cancelled,0
+ORD-000067,CUST-1584,bob.johnson86@gmail.com,Bob Johnson,+1-894-900-8179,New York,DE,2024-03-12,2024-03-16,2024-03-18,PROD-168,Ultra Gizmo 24,Books,6,364.77,0.17,1816.55,crypto,processing,0
+ORD-000068,CUST-3044,mia.miller84@yahoo.com,Mia Miller,+1-775-220-5288,Mumbai,BR,2023-02-03,2023-02-09,2023-02-16,PROD-319,Basic Device 13,Electronics,2,189.15,0.21,298.86,debit_card,completed,0
+ORD-000069,CUST-3083,rita.moore38@gmail.com,Rita Moore,+1-405-911-3275,Paris,BR,2023-03-17,2023-03-23,2023-03-26,PROD-126,Basic Gizmo 30,Toys,6,406.2,0.28,1754.78,crypto,processing,0
+ORD-000070,CUST-3119,sam.johnson17@gmail.com,Sam Johnson,+1-998-664-3981,Berlin,AU,2023-05-13,2023-05-14,,PROD-614,Pro Widget 34,Clothing,8,202.09,0.31,1115.54,paypal,cancelled,0
+ORD-000071,CUST-1690,rita.jones17@gmail.com,Rita Jones,+1-794-257-3804,,NG,2023-06-18,2023-06-24,2023-07-04,PROD-837,Basic Widget 2,Electronics,2,447.99,0.0,895.98,credit_card,completed,0
+ORD-000072,CUST-3820,jack.wilson32@gmail.com,Jack Wilson,,São Paulo,AU,2023-09-29,2023-10-06,2023-10-17,PROD-595,Premium Gadget 22,Sports,8,321.3,0.22,2004.91,debit_card,shipped,0
+ORD-000073,CUST-1207,david.miller31@gmail.com,David Miller,+1-593-984-7850,Paris,DE,2023-11-17,2023-11-20,2023-11-27,PROD-933,Basic Gizmo 13,Toys,3,487.81,0.21,1156.11,debit_card,processing,0
+ORD-000074,CUST-4452,hank.brown75@gmail.com,Hank Brown,+1-681-392-9793,New York,UK,2024-05-25,2024-05-29,2024-06-04,PROD-541,Ultra Gizmo 47,Home & Garden,2,251.2,0.2,401.92,bank_transfer,cancelled,0
+ORD-000075,CUST-2145,rita.jones10@gmail.com,Rita Jones,+1-838-796-2946,Berlin,UK,2024-01-10,,,PROD-503,Basic Gizmo 36,Home & Garden,9,30.32,0.0,272.88,debit_card,returned,1
+ORD-000076,CUST-3525,emma.taylor66@yahoo.com,Emma Taylor,+1-506-707-6511,Tokyo,JP,2023-07-23,2023-07-27,2023-07-29,PROD-645,Premium Gizmo 31,Toys,6,24.26,0.21,114.99,credit_card,shipped,0
+ORD-000077,CUST-3953,sam.taylor30@gmail.com,Sam Taylor,+1-589-251-4968,New York,NG,2024-01-13,2024-01-14,2024-01-25,PROD-817,Pro Gadget 2,Books,1,157.3,0.11,140.0,paypal,processing,0
+ORD-000078,CUST-2285,bob.thomas18@gmail.com,Bob Thomas,+1-670-645-6608,Tokyo,CA,2024-03-04,2024-03-10,2024-03-20,PROD-792,Basic Device 13,Clothing,8,388.61,0.29,2207.3,paypal,cancelled,0
+ORD-000079,CUST-2555,leo.moore93@yahoo.com,Leo Moore,+1-604-938-6654,Berlin,IN,2023-11-02,2023-11-05,2023-11-18,PROD-143,Basic Widget 23,Books,8,107.6,0.0,860.8,paypal,returned,1
+ORD-000080,CUST-1215,sam.brown32@yahoo.com,Sam Brown,,Toronto,BR,2024-05-05,2024-05-12,2024-05-22,PROD-202,Ultra Widget 36,Clothing,3,349.6,0.0,1048.8,bank_transfer,processing,0
+ORD-000081,CUST-1717,sam.brown69@gmail.com,Sam Brown,+1-380-137-7504,São Paulo,DE,2024-05-02,2024-05-04,2024-05-10,PROD-866,Basic Widget 1,Home & Garden,1,163.98,0.04,157.42,crypto,completed,0
+ORD-000082,CUST-3655,quinn.wilson35@yahoo.com,Quinn Wilson,+1-390-114-6523,Mumbai,NG,2023-04-20,2023-04-23,2023-05-05,PROD-790,Ultra Gadget 40,Toys,8,273.93,0.05,2081.87,bank_transfer,processing,0
+ORD-000083,CUST-2236,hank.smith34@gmail.com,Hank Smith,+1-786-111-5285,,CA,2024-03-13,2024-03-14,2024-03-17,PROD-809,Ultra Widget 43,Electronics,3,96.47,0.0,289.41,bank_transfer,shipped,0
+ORD-000084,CUST-3481,leo.taylor29@yahoo.com,Leo Taylor,+1-918-662-8714,Tokyo,FR,2023-11-11,2023-11-17,2023-11-30,PROD-880,Ultra Widget 34,Books,2,386.07,0.38,478.73,crypto,processing,0
+ORD-000085,CUST-2809,grace.taylor69@yahoo.com,Grace Taylor,,Paris,NG,2024-01-06,,,PROD-600,Pro Device 4,Books,1,284.26,0.36,181.93,debit_card,returned,1
+ORD-000086,CUST-3216,INVALID_EMAIL,Alice Thomas,+1-270-583-1519,Mumbai,AU,2024-06-09,2024-06-14,,PROD-284,Ultra Device 24,Books,5,233.88,0.16,982.3,bank_transfer,shipped,0
+ORD-000087,CUST-2222,rita.davis68@yahoo.com,Rita Davis,+1-936-657-7948,Tokyo,AU,2024-01-22,2024-01-28,2024-02-07,PROD-943,Ultra Gadget 30,Home & Garden,6,70.83,0.0,424.98,debit_card,completed,0
+ORD-000088,CUST-3880,alice.brown27@yahoo.com,Alice Brown,+1-450-858-1724,Sydney,BR,2023-10-10,2023-10-16,2023-10-18,PROD-339,Ultra Widget 9,Sports,7,405.69,0.37,1789.09,paypal,cancelled,0
+ORD-000089,CUST-3423,emma.anderson67@yahoo.com,Emma Anderson,+1-379-741-7999,Tokyo,BR,2023-08-28,2023-09-03,2023-09-14,PROD-148,Basic Device 34,Home & Garden,6,300.97,0.0,1805.82,bank_transfer,completed,0
+ORD-000090,CUST-1549,emma.jackson60@gmail.com,Emma Jackson,+1-461-308-6411,,UK,2024-02-23,2024-02-27,,PROD-560,Basic Widget 35,Beauty,4,271.27,0.12,954.87,debit_card,cancelled,0
+ORD-000091,CUST-1062,rita.brown62@yahoo.com,Rita Brown,+1-394-859-2922,,BR,2023-02-22,2023-02-28,2023-03-02,PROD-348,Ultra Device 16,Sports,4,437.44,0.24,1329.82,paypal,shipped,0
+ORD-000092,CUST-4539,pete.jackson41@gmail.com,Pete Jackson,+1-349-116-5272,Tokyo,NG,2023-10-17,2023-10-22,2023-10-28,PROD-693,Premium Gizmo 10,Clothing,9,134.47,0.19,980.29,paypal,cancelled,1
+ORD-000093,CUST-3950,pete.thomas83@gmail.com,Pete Thomas,+1-388-655-1962,Tokyo,US,2023-08-24,2023-08-31,2023-09-10,PROD-959,Pro Widget 49,Electronics,6,329.03,0.0,1974.18,bank_transfer,shipped,0
+ORD-000094,CUST-3179,tina.anderson86@gmail.com,Tina Anderson,+1-212-117-9673,,IN,2023-05-21,2023-05-23,,PROD-648,Basic Widget 33,Toys,4,79.76,0.15,271.18,bank_transfer,cancelled,1
+ORD-000095,CUST-3855,leo.jones51@yahoo.com,Leo Jones,+1-900-947-2320,,US,2023-07-03,2023-07-04,2023-07-09,PROD-195,Premium Device 25,Sports,9,100.01,0.0,900.09,bank_transfer,cancelled,0
+ORD-000096,CUST-2947,david.harris68@gmail.com,David Harris,+1-276-800-5593,Tokyo,NG,2023-02-27,2023-03-05,,PROD-773,Pro Gadget 21,Electronics,7,252.43,0.13,1537.3,debit_card,returned,1
+ORD-000097,CUST-3823,mia.anderson70@gmail.com,Mia Anderson,+1-712-863-6666,New York,UK,2023-05-28,2023-06-03,2023-06-06,PROD-547,Ultra Widget 22,Sports,10,153.14,0.0,1531.4,crypto,processing,0
+ORD-000098,CUST-3533,leo.moore49@gmail.com,Leo Moore,+1-452-830-2204,London,IN,2024-02-11,2024-02-14,,PROD-257,Premium Gadget 48,Books,8,140.3,0.0,1122.4,paypal,cancelled,0
+ORD-000099,CUST-1367,carol.williams56@gmail.com,Carol Williams,+1-295-711-6315,Sydney,US,2024-01-05,2024-01-06,2024-01-15,PROD-398,Premium Device 50,Electronics,5,183.16,0.0,915.8,crypto,cancelled,0
+ORD-000100,CUST-2479,emma.johnson22@gmail.com,Emma Johnson,+1-452-838-9123,Lagos,NG,2023-09-06,2023-09-08,2023-09-12,PROD-300,Premium Widget 9,Home & Garden,5,73.73,0.0,368.65,credit_card,cancelled,0
+ORD-000101,CUST-1727,tina.williams39@gmail.com,Tina Williams,+1-526-398-9044,Lagos,FR,2024-02-10,2024-02-15,2024-02-22,PROD-433,Premium Gizmo 26,Home & Garden,7,222.91,0.34,1029.84,credit_card,processing,0
+ORD-000102,CUST-1570,grace.wilson38@gmail.com,Grace Wilson,+1-447-358-3525,,AU,2023-07-24,2023-07-29,,PROD-908,Premium Widget 29,Sports,1,384.97,0.18,315.68,bank_transfer,cancelled,0
+ORD-000103,CUST-3509,tina.anderson11@yahoo.com,Tina Anderson,,,AU,2024-02-15,2024-02-22,2024-03-03,PROD-870,Basic Device 7,Electronics,6,23.2,0.32,94.66,credit_card,shipped,0
+ORD-000104,CUST-1100,mia.wilson99@gmail.com,Mia Wilson,+1-502-525-2406,London,DE,2023-09-22,2023-09-28,2023-10-09,PROD-456,Basic Gizmo 30,Toys,4,345.39,0.0,1381.56,debit_card,processing,0
+ORD-000105,CUST-1673,jack.smith91@yahoo.com,Jack Smith,+1-958-349-9454,Berlin,JP,2024-06-17,2024-06-21,,PROD-263,Basic Device 30,Clothing,8,362.39,0.0,2899.12,bank_transfer,completed,0
+ORD-000106,CUST-4274,noah.davis1@gmail.com,Noah Davis,+1-391-474-6340,Paris,BR,2023-07-08,2023-07-14,2023-07-16,PROD-216,Basic Device 34,Beauty,4,370.01,0.0,1480.04,paypal,completed,0
+ORD-000107,CUST-2250,jack.harris79@gmail.com,Jack Harris,,Toronto,DE,2024-02-02,2024-02-07,,PROD-623,Premium Device 39,Clothing,8,179.23,0.33,960.67,crypto,shipped,0
+ORD-000108,CUST-2984,emma.williams41@gmail.com,Emma Williams,,Sydney,JP,2024-01-28,2024-02-01,2024-02-14,PROD-617,Premium Device 44,Books,3,459.98,0.2,1103.95,bank_transfer,shipped,0
+ORD-000109,CUST-1463,hank.moore37@yahoo.com,Hank Moore,+1-474-893-9898,Toronto,JP,2024-03-30,2024-03-31,2024-04-14,PROD-942,Pro Device 35,Clothing,5,381.72,0.0,1908.6,bank_transfer,cancelled,0
+ORD-000110,CUST-4021,leo.white12@gmail.com,Leo White,+1-559-981-8015,Berlin,NG,2023-04-15,2023-04-21,2023-04-27,PROD-242,Ultra Gadget 4,Sports,1,438.03,0.0,438.03,paypal,processing,0
+ORD-000111,CUST-4072,iris.white66@gmail.com,Iris White,+1-260-383-3078,,DE,2024-06-29,2024-07-04,,PROD-355,Ultra Gizmo 16,Toys,5,489.61,0.0,2448.05,bank_transfer,completed,0
+ORD-000112,CUST-2999,carol.davis66@gmail.com,Carol Davis,+1-202-989-2526,,BR,2024-05-16,2024-05-22,2024-05-30,PROD-750,Basic Widget 35,Books,2,190.71,0.35,247.92,debit_card,shipped,0
+ORD-000113,CUST-4210,pete.jackson44@gmail.com,Pete Jackson,+1-216-227-3588,São Paulo,BR,2024-03-15,2024-03-19,2024-03-25,PROD-100,Premium Gadget 45,Clothing,10,172.19,0.0,1721.9,paypal,completed,0
+ORD-000114,CUST-1373,frank.smith51@gmail.com,Frank Smith,+1-201-318-8812,London,DE,2023-06-12,2023-06-15,,PROD-707,Ultra Device 1,Electronics,2,183.42,0.0,366.84,paypal,processing,0
+ORD-000115,CUST-4084,david.johnson41@gmail.com,David Johnson,+1-856-793-3340,London,JP,2023-05-04,2023-05-08,2023-05-17,PROD-676,Pro Gadget 29,Home & Garden,7,40.06,0.0,280.42,debit_card,cancelled,0
+ORD-000116,CUST-2014,david.taylor94@gmail.com,David Taylor,+1-286-354-5668,,US,2023-06-05,2023-06-10,2023-06-15,PROD-968,Basic Gadget 34,Sports,2,47.91,0.0,95.82,crypto,shipped,0
+ORD-000117,CUST-4825,david.brown64@gmail.com,David Brown,+1-596-981-7895,Toronto,JP,2023-07-13,2023-07-16,2023-07-30,PROD-799,Ultra Device 50,Electronics,4,449.47,0.0,1797.88,credit_card,completed,0
+ORD-000118,CUST-3197,jack.anderson92@gmail.com,Jack Anderson,+1-356-384-2369,Mumbai,UK,2023-03-11,,,PROD-623,Ultra Gadget 35,Home & Garden,1,111.79,0.16,93.9,bank_transfer,cancelled,0
+ORD-000119,CUST-3899,tina.taylor8@gmail.com,Tina Taylor,,New York,DE,2023-03-09,2023-03-13,2023-03-18,PROD-608,Basic Gizmo 11,Home & Garden,2,33.66,0.05,63.95,debit_card,processing,0
+ORD-000120,CUST-2475,carol.jones92@gmail.com,Carol Jones,,Lagos,DE,2023-10-03,2023-10-04,2023-10-06,PROD-476,Ultra Gizmo 50,Electronics,7,170.83,0.0,1195.81,crypto,cancelled,0
+ORD-000121,CUST-4743,pete.miller50@gmail.com,Pete Miller,+1-871-529-4678,Toronto,FR,2023-04-29,2023-05-04,,PROD-526,Basic Gizmo 5,Sports,1,430.05,0.0,430.05,paypal,completed,0
+ORD-000122,CUST-1032,olivia.white37@gmail.com,Olivia White,+1-498-677-5979,,NG,2023-05-03,2023-05-04,,PROD-348,Premium Gizmo 38,Books,1,403.15,0.03,391.06,debit_card,completed,0
+ORD-000123,CUST-1975,mia.white95@gmail.com,Mia White,+1-261-245-5584,London,US,2023-09-09,2023-09-13,,PROD-337,Premium Gizmo 30,Beauty,1,273.06,0.0,273.06,credit_card,returned,1
+ORD-000124,CUST-4012,emma.brown38@yahoo.com,Emma Brown,+1-663-378-4827,London,FR,2023-04-08,2023-04-14,2023-04-17,PROD-239,Pro Gadget 7,Clothing,1,297.99,0.0,297.99,bank_transfer,cancelled,0
+ORD-000125,CUST-1165,david.johnson21@gmail.com,David Johnson,+1-535-251-2494,,FR,2024-04-22,2024-04-23,2024-05-07,PROD-464,Premium Widget 44,Home & Garden,5,107.78,0.0,538.9,paypal,returned,1
+ORD-000126,CUST-4198,david.wilson14@gmail.com,David Wilson,+1-333-302-7563,Toronto,UK,2023-06-28,,,PROD-696,Basic Widget 2,Electronics,8,205.17,0.22,1280.26,debit_card,completed,0
+ORD-000127,CUST-1879,INVALID_EMAIL,Sam Davis,+1-481-386-8307,Berlin,US,2024-03-30,2024-03-31,2024-04-14,PROD-728,Ultra Gizmo 32,Books,1,169.12,0.02,165.74,crypto,cancelled,0
+ORD-000128,CUST-4202,quinn.brown81@gmail.com,Quinn Brown,+1-691-657-8940,Toronto,NG,2024-05-05,,,PROD-614,Basic Device 18,Clothing,3,143.49,0.0,430.47,credit_card,completed,0
+ORD-000129,CUST-4343,hank.williams13@yahoo.com,Hank Williams,+1-954-157-4594,Lagos,AU,2023-11-23,2023-11-24,2023-12-08,PROD-463,Ultra Gadget 16,Sports,8,144.06,0.31,795.21,paypal,returned,1
+ORD-000130,CUST-1952,grace.white64@gmail.com,Grace White,+1-220-639-8831,New York,CA,2024-01-03,2024-01-04,2024-01-11,PROD-728,Ultra Gadget 22,Beauty,10,474.04,0.0,4740.4,debit_card,completed,0
+ORD-000131,CUST-1413,leo.johnson48@gmail.com,Leo Johnson,+1-530-239-3580,,AU,2023-11-28,,,PROD-910,Premium Gizmo 12,Beauty,3,78.12,0.34,154.68,crypto,returned,1
+ORD-000132,CUST-1132,alice.thomas74@gmail.com,Alice Thomas,+1-525-928-4619,,NG,2024-01-01,2024-01-06,2024-01-14,PROD-206,Premium Gadget 22,Beauty,5,156.88,0.0,784.4,credit_card,returned,1
+ORD-000133,CUST-4223,karen.wilson2@yahoo.com,Karen Wilson,,New York,US,2023-09-01,2023-09-04,,PROD-495,Premium Device 11,Books,2,443.23,0.27,647.12,bank_transfer,completed,0
+ORD-000134,CUST-4898,INVALID_EMAIL,Frank Wilson,,Toronto,DE,2024-01-23,2024-01-27,,PROD-484,Ultra Widget 36,Electronics,10,242.35,0.27,1769.15,paypal,completed,0
+ORD-000135,CUST-3957,david.miller27@gmail.com,David Miller,+1-753-371-5612,Mumbai,FR,2024-05-09,2024-05-13,2024-05-17,PROD-198,Pro Device 37,Sports,7,305.62,0.0,2139.34,bank_transfer,returned,1
+ORD-000136,CUST-2939,tina.wilson26@yahoo.com,Tina Wilson,+1-515-903-7512,São Paulo,BR,2023-06-07,,,PROD-776,Basic Widget 42,Sports,2,6.89,0.0,13.78,bank_transfer,shipped,0
+ORD-000137,CUST-2408,hank.white35@gmail.com,Hank White,+1-623-874-4727,Tokyo,US,2023-07-09,2023-07-13,2023-07-22,PROD-960,Premium Device 35,Beauty,8,27.09,0.0,216.72,bank_transfer,completed,0
+ORD-000138,CUST-4311,tina.williams16@gmail.com,Tina Williams,+1-243-533-2283,,AU,2023-08-30,2023-08-31,2023-09-13,PROD-306,Ultra Gizmo 21,Beauty,10,22.19,0.32,150.89,credit_card,processing,0
+ORD-000139,CUST-3408,quinn.jackson54@yahoo.com,Quinn Jackson,+1-302-208-2654,Mumbai,JP,2023-03-31,2023-04-04,2023-04-10,PROD-452,Premium Gizmo 25,Beauty,1,262.25,0.25,196.69,bank_transfer,returned,1
+ORD-000140,CUST-2946,mia.smith51@gmail.com,Mia Smith,+1-581-120-6535,Mumbai,IN,2024-04-29,,,PROD-387,Premium Widget 15,Clothing,3,141.33,0.27,309.51,paypal,processing,1
+ORD-000141,CUST-3110,grace.harris53@gmail.com,Grace Harris,+1-267-418-9303,Sydney,DE,2024-03-29,2024-04-01,2024-04-09,PROD-899,Pro Gadget 13,Toys,2,304.46,0.0,608.92,debit_card,shipped,0
+ORD-000142,CUST-3002,olivia.moore51@gmail.com,Olivia Moore,+1-381-991-8775,Lagos,JP,2023-03-01,2023-03-05,,PROD-458,Basic Gadget 17,Beauty,4,183.39,0.0,733.56,credit_card,completed,0
+ORD-000143,CUST-4541,hank.anderson29@gmail.com,Hank Anderson,+1-985-798-1145,São Paulo,DE,2023-10-19,,,PROD-762,Ultra Widget 15,Home & Garden,10,29.58,0.09,269.18,crypto,cancelled,0
+ORD-000144,CUST-1030,grace.wilson39@gmail.com,Grace Wilson,+1-878-963-7131,Tokyo,NG,2023-11-09,2023-11-15,2023-11-23,PROD-723,Basic Gizmo 44,Electronics,6,448.26,0.0,2689.56,bank_transfer,cancelled,0
+ORD-000145,CUST-2655,quinn.jackson31@gmail.com,Quinn Jackson,+1-897-243-1417,,BR,2023-03-07,2023-03-10,2023-03-16,PROD-402,Basic Device 26,Books,5,134.27,0.0,671.35,credit_card,returned,1
+ORD-000146,CUST-2928,quinn.jones22@gmail.com,Quinn Jones,,Mumbai,JP,2023-07-14,2023-07-20,2023-07-30,PROD-881,Ultra Gizmo 42,Electronics,8,320.97,0.27,1874.46,debit_card,processing,0
+ORD-000147,CUST-3376,jack.wilson16@gmail.com,Jack Wilson,+1-272-583-4187,Tokyo,UK,2023-12-30,2024-01-06,2024-01-20,PROD-988,Premium Gizmo 27,Electronics,6,443.99,0.0,2663.94,debit_card,returned,1
+ORD-000148,CUST-1237,frank.jackson11@gmail.com,Frank Jackson,,Mumbai,FR,2023-05-21,2023-05-24,2023-06-04,PROD-879,Ultra Gadget 32,Toys,8,446.96,0.0,3575.68,credit_card,processing,0
+ORD-000149,CUST-3175,INVALID_EMAIL,Rita Brown,+1-892-104-5076,Paris,CA,2023-05-13,2023-05-19,2023-05-27,PROD-419,Ultra Widget 25,Sports,7,482.84,0.0,3379.88,crypto,shipped,0
+ORD-000150,CUST-1771,karen.davis88@gmail.com,Karen Davis,+1-613-119-4742,Paris,DE,2023-11-10,2023-11-17,,PROD-316,Pro Gadget 8,Home & Garden,8,474.49,0.24,2884.9,credit_card,cancelled,0
+ORD-000151,CUST-2943,alice.smith89@yahoo.com,Alice Smith,+1-410-811-1152,Mumbai,AU,2024-01-20,2024-01-23,2024-02-03,PROD-777,Pro Gizmo 40,Sports,1,29.05,0.26,21.5,debit_card,completed,0
+ORD-000152,CUST-2209,tina.brown34@gmail.com,Tina Brown,+1-761-608-4402,,BR,2024-03-04,2024-03-05,2024-03-16,PROD-438,Ultra Widget 1,Beauty,2,63.28,0.2,101.25,credit_card,shipped,0
+ORD-000153,CUST-1408,iris.anderson30@gmail.com,Iris Anderson,+1-240-972-5760,Toronto,CA,2023-04-24,2023-04-30,2023-05-03,PROD-536,Pro Widget 49,Electronics,2,390.87,0.04,750.47,credit_card,shipped,0
+ORD-000154,CUST-3825,karen.williams15@gmail.com,Karen Williams,+1-631-764-3732,London,DE,2023-05-22,2023-05-24,2023-06-02,PROD-812,Pro Gadget 7,Books,5,477.77,0.04,2293.3,crypto,shipped,0
+ORD-000155,CUST-3682,emma.wilson63@yahoo.com,Emma Wilson,+1-921-989-9598,,NG,2024-05-09,2024-05-15,2024-05-26,PROD-841,Ultra Gizmo 34,Sports,6,192.98,0.35,752.62,crypto,completed,0
+ORD-000156,CUST-2922,rita.harris79@yahoo.com,Rita Harris,+1-369-176-9055,Toronto,FR,2023-04-08,2023-04-14,2023-04-21,PROD-438,Basic Widget 33,Clothing,7,333.54,0.0,2334.78,crypto,processing,0
+ORD-000157,CUST-2688,pete.wilson41@yahoo.com,Pete Wilson,,Tokyo,US,2024-01-23,2024-01-25,,PROD-945,Pro Gizmo 33,Sports,10,224.87,0.0,2248.7,debit_card,completed,0
+ORD-000158,CUST-1908,pete.thomas85@gmail.com,Pete Thomas,,Toronto,IN,2024-04-12,2024-04-15,2024-04-20,PROD-660,Basic Widget 3,Clothing,6,422.94,0.25,1903.23,bank_transfer,completed,0
+ORD-000159,CUST-2697,mia.brown59@gmail.com,Mia Brown,,,NG,2023-05-24,2023-05-30,2023-06-02,PROD-226,Premium Device 43,Sports,4,130.87,0.0,523.48,crypto,shipped,0
+ORD-000160,CUST-3693,quinn.jackson23@gmail.com,Quinn Jackson,+1-529-616-7302,Sydney,NG,2023-05-18,2023-05-19,2023-05-21,PROD-809,Ultra Gizmo 26,Home & Garden,7,278.85,0.19,1581.08,paypal,processing,0
+ORD-000161,CUST-3556,rita.white41@gmail.com,Rita White,+1-903-453-3173,,DE,2024-04-08,2024-04-10,2024-04-23,PROD-615,Basic Widget 49,Home & Garden,9,443.79,0.0,3994.11,crypto,processing,0
+ORD-000162,CUST-1231,INVALID_EMAIL,Noah Jackson,+1-968-904-3636,Mumbai,IN,2024-05-06,2024-05-12,2024-05-24,PROD-249,Pro Gizmo 14,Toys,9,375.2,0.0,3376.8,crypto,processing,0
+ORD-000163,CUST-1192,rita.davis31@gmail.com,Rita Davis,+1-596-526-6122,Tokyo,US,2023-02-03,2023-02-07,,PROD-113,Basic Gadget 40,Toys,9,434.68,0.3,2738.48,bank_transfer,shipped,0
+ORD-000164,CUST-4010,grace.jones58@yahoo.com,Grace Jones,+1-586-141-8020,Mumbai,JP,2023-08-19,2023-08-25,2023-09-01,PROD-370,Ultra Gadget 38,Toys,9,378.78,0.08,3136.3,paypal,processing,0
+ORD-000165,CUST-2466,tina.white85@gmail.com,Tina White,,,CA,2023-01-06,2023-01-12,2023-01-14,PROD-638,Ultra Gadget 34,Electronics,6,81.08,0.31,335.67,crypto,returned,1
+ORD-000166,CUST-4373,jack.brown97@gmail.com,Jack Brown,+1-864-109-2879,,CA,2023-06-13,2023-06-18,2023-06-25,PROD-556,Ultra Gadget 3,Beauty,4,114.49,0.13,398.43,paypal,returned,1
+ORD-000167,CUST-1337,INVALID_EMAIL,Leo Moore,+1-371-891-9814,Tokyo,US,2024-01-26,2024-01-27,2024-02-06,PROD-741,Pro Gadget 43,Beauty,1,363.37,0.33,243.46,debit_card,processing,0
+ORD-000168,CUST-4253,INVALID_EMAIL,Emma Smith,+1-272-688-4729,Mumbai,AU,2024-03-10,2024-03-12,2024-03-25,PROD-497,Premium Device 28,Home & Garden,7,439.93,0.38,1909.3,credit_card,completed,0
+ORD-000169,CUST-2153,carol.miller65@yahoo.com,Carol Miller,+1-648-490-7473,,US,2024-02-03,2024-02-08,,PROD-585,Ultra Gadget 9,Beauty,2,361.54,0.23,556.77,bank_transfer,shipped,0
+ORD-000170,CUST-4878,rita.williams16@yahoo.com,Rita Williams,,Paris,CA,2023-10-30,2023-11-01,2023-11-15,PROD-316,Premium Gadget 11,Clothing,6,434.23,0.0,2605.38,debit_card,cancelled,0
+ORD-000171,CUST-2995,rita.johnson38@gmail.com,Rita Johnson,+1-565-231-4842,London,IN,2023-09-16,2023-09-18,2023-09-29,PROD-734,Pro Gadget 21,Books,9,426.86,0.0,3841.74,bank_transfer,processing,0
+ORD-000172,CUST-2472,frank.smith41@yahoo.com,Frank Smith,,,CA,2023-12-03,2023-12-06,2023-12-10,PROD-998,Premium Device 29,Home & Garden,6,284.95,0.38,1060.01,paypal,cancelled,0
+ORD-000173,CUST-3371,carol.thomas10@gmail.com,Carol Thomas,+1-804-317-1600,Tokyo,IN,2024-05-13,2024-05-15,2024-05-18,PROD-656,Premium Gadget 24,Books,3,421.69,0.08,1163.86,debit_card,completed,0
+ORD-000174,CUST-4885,tina.anderson22@gmail.com,Tina Anderson,+1-349-853-8921,Toronto,US,2023-10-25,2023-10-30,2023-11-07,PROD-324,Premium Gadget 5,Home & Garden,1,185.11,0.34,122.17,paypal,processing,0
+ORD-000175,CUST-3135,olivia.harris6@yahoo.com,Olivia Harris,+1-480-954-5314,Lagos,JP,2023-08-28,,,PROD-683,Ultra Device 42,Books,6,107.35,0.0,644.1,paypal,completed,0
+ORD-000176,CUST-1315,pete.harris78@yahoo.com,Pete Harris,+1-487-316-3461,Berlin,DE,2023-03-21,2023-03-25,2023-03-30,PROD-470,Pro Gadget 27,Toys,6,260.6,0.14,1344.7,paypal,cancelled,0
+ORD-000177,CUST-1160,bob.williams74@gmail.com,Bob Williams,+1-350-157-3725,Mumbai,DE,2023-04-27,2023-05-01,2023-05-12,PROD-629,Premium Widget 47,Beauty,7,84.82,0.0,593.74,paypal,returned,1
+ORD-000178,CUST-3443,frank.taylor85@gmail.com,Frank Taylor,+1-435-487-7315,Berlin,UK,2023-03-29,2023-04-03,2023-04-12,PROD-116,Ultra Device 10,Sports,7,89.43,0.32,425.69,credit_card,shipped,0
+ORD-000179,CUST-2517,INVALID_EMAIL,Emma Harris,+1-914-642-8028,Paris,BR,2023-07-01,2023-07-06,2023-07-20,PROD-908,Premium Gizmo 38,Toys,2,268.06,0.0,536.12,crypto,cancelled,0
+ORD-000180,CUST-1482,rita.davis33@yahoo.com,Rita Davis,+1-584-770-4365,,CA,2023-04-11,2023-04-14,2023-04-19,PROD-518,Basic Widget 10,Books,2,455.49,0.0,910.98,crypto,completed,0
+ORD-000181,CUST-3366,rita.wilson23@gmail.com,Rita Wilson,+1-922-507-3262,,UK,2023-09-17,2023-09-22,2023-09-29,PROD-865,Ultra Device 45,Clothing,7,307.88,0.17,1788.78,credit_card,shipped,0
+ORD-000182,CUST-2783,alice.jackson12@gmail.com,Alice Jackson,,Mumbai,FR,2023-08-08,2023-08-15,2023-08-25,PROD-479,Pro Widget 47,Books,1,308.94,0.0,308.94,bank_transfer,returned,1
+ORD-000183,CUST-3455,grace.white85@gmail.com,Grace White,+1-915-337-3776,,US,2024-06-17,2024-06-22,,PROD-468,Ultra Widget 11,Electronics,3,387.94,0.18,954.33,paypal,processing,1
+ORD-000184,CUST-4944,rita.harris75@gmail.com,Rita Harris,+1-613-688-1076,Mumbai,DE,2024-02-14,2024-02-18,2024-02-23,PROD-516,Pro Widget 33,Home & Garden,2,261.28,0.22,407.6,paypal,shipped,0
+ORD-000185,CUST-4530,hank.jackson44@gmail.com,Hank Jackson,,London,IN,2023-04-30,2023-05-03,2023-05-17,PROD-169,Premium Gadget 44,Beauty,8,289.57,0.23,1783.75,debit_card,cancelled,0
+ORD-000186,CUST-4814,carol.davis87@gmail.com,Carol Davis,+1-521-462-4580,Lagos,IN,2023-11-20,2023-11-23,2023-11-25,PROD-287,Ultra Device 48,Clothing,5,351.91,0.0,1759.55,debit_card,returned,1
+ORD-000187,CUST-1027,david.johnson11@gmail.com,David Johnson,+1-754-143-8901,Toronto,NG,2023-09-05,2023-09-07,2023-09-12,PROD-422,Premium Gizmo 32,Clothing,6,418.99,0.0,2513.94,crypto,returned,1
+ORD-000188,CUST-1493,rita.smith65@gmail.com,Rita Smith,+1-671-423-1137,New York,FR,2023-10-14,2023-10-21,2023-10-23,PROD-488,Pro Gizmo 24,Sports,7,265.24,0.0,1856.68,paypal,processing,0
+ORD-000189,CUST-1736,grace.davis90@gmail.com,Grace Davis,+1-789-802-4744,London,IN,2023-07-11,2023-07-13,2023-07-24,PROD-923,Ultra Device 25,Clothing,3,174.83,0.0,524.49,debit_card,cancelled,0
+ORD-000190,CUST-1669,pete.jones33@gmail.com,Pete Jones,,Mumbai,BR,2023-06-03,2023-06-04,,PROD-959,Pro Device 48,Home & Garden,9,252.3,0.13,1975.51,paypal,cancelled,0
+ORD-000191,CUST-2165,tina.brown74@gmail.com,Tina Brown,+1-889-622-8987,,BR,2024-01-05,2024-01-10,2024-01-16,PROD-180,Premium Gizmo 30,Beauty,7,175.35,0.0,1227.45,debit_card,processing,0
+ORD-000192,CUST-2619,karen.brown41@gmail.com,Karen Brown,+1-655-899-6950,,NG,2023-06-21,2023-06-24,2023-07-05,PROD-633,Premium Device 11,Clothing,2,287.96,0.0,575.92,credit_card,shipped,0
+ORD-000193,CUST-1220,mia.johnson13@yahoo.com,Mia Johnson,,Sydney,JP,2023-05-09,2023-05-15,2023-05-28,PROD-883,Pro Widget 17,Sports,2,351.84,0.0,703.68,debit_card,returned,1
+ORD-000194,CUST-2913,frank.smith5@gmail.com,Frank Smith,+1-753-378-9987,São Paulo,DE,2023-03-28,2023-04-01,2023-04-06,PROD-814,Ultra Device 41,Beauty,8,370.11,0.05,2812.84,crypto,shipped,0
+ORD-000195,CUST-4339,INVALID_EMAIL,Leo Davis,+1-339-452-5698,São Paulo,JP,2024-03-21,2024-03-27,2024-04-03,PROD-108,Premium Device 20,Electronics,4,243.42,0.18,798.42,bank_transfer,returned,1
+ORD-000196,CUST-1324,hank.williams92@gmail.com,Hank Williams,+1-445-629-5454,Mumbai,JP,2023-10-27,2023-11-03,,PROD-928,Basic Device 13,Toys,7,189.95,0.17,1103.61,credit_card,cancelled,0
+ORD-000197,CUST-2155,karen.smith20@yahoo.com,Karen Smith,+1-932-548-1134,Paris,UK,2023-07-06,2023-07-07,2023-07-18,PROD-254,Pro Device 14,Home & Garden,10,229.12,0.0,2291.2,bank_transfer,processing,0
+ORD-000198,CUST-4668,emma.smith35@gmail.com,Emma Smith,+1-590-948-1206,London,FR,2023-11-16,2023-11-20,2023-11-29,PROD-494,Premium Gadget 48,Electronics,1,349.98,0.0,349.98,debit_card,cancelled,0
+ORD-000199,CUST-4635,bob.thomas71@gmail.com,Bob Thomas,,,FR,2024-04-16,2024-04-17,2024-04-22,PROD-215,Ultra Device 21,Electronics,5,239.05,0.06,1123.53,debit_card,shipped,0
+ORD-000200,CUST-3533,tina.williams48@gmail.com,Tina Williams,+1-977-740-1983,New York,CA,2023-10-10,2023-10-14,2023-10-16,PROD-760,Ultra Widget 9,Books,10,484.57,0.19,3925.02,debit_card,cancelled,0

@@ -1,0 +1,12 @@
+record_id,customer,contact,score,signup_date,notes,tags,metadata,status,
+1,John Doe,john.doe@example.com,87,2024-01-15,"Prefers email, asked about pricing",vip|newsletter,"{\source\"":\""web\""","\""utm\"":\""spring\""}""",active
+2,Jane Smith,jane.smith@example.com,91,2024-01-18,Needs callback on Friday,high_value|trial,"{\source\"":\""partner\""","\""utm\"":\""q1\""}""",active
+3,Samir Ali,samir.ali@example.com,,2024-02-02,"Left a note with a comma, needs follow-up",support|urgent,"{\source\"":\""app\""","\""utm\"":\""none\""}""",pending
+4,Mei Chen,mei.chen@example.com,76,2024-02-11,Speaks Mandarin,,,,
+"Prefers WhatsApp""",international|vip,"{\source\"":\""web\""","\""utm\"":\""summer\""}""",active,,,,,
+5,Lara Costa,lara.costa@example.com,65,2024-02-14,"Quoted \special\"" request""",trial,"{\source\"":\""email\""","\""utm\"":\""promo\""}""",inactive
+6,INVALID_EMAIL,not-an-email,40,2024-02-20,Bad contact record,bad_data,"{\source\"":\""unknown\""}""",inactive,
+7,Alex Kim,alex.kim@example.com,88,2024/03/01,Date format differs,vip|beta,"{\source\"":\""web\""","\""utm\"":\""launch\""}""",active
+8,Priya Nair,priya.nair@example.com,92,2024-03-05,Duplicate tag test,vip|vip|newsletter,"{\source\"":\""web\""","\""utm\"":\""spring\""}""",active
+9,Noah Brown,noah.brown@example.com,73,,,missing|edge,"{\source\"":\""app\""}""",pending,
+10,Eva Rossi,eva.rossi@example.com,81,2024-03-12,Contains semicolon; should still parse,sales|priority,"{\source\"":\""partner\""","\""utm\"":\""q2\""}""",active

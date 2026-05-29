@@ -1,0 +1,11 @@
+employee_id,first_name,last_name,gender,date_of_birth,email,phone,department,job_title,hire_date,employment_type,salary_usd,manager_id,location,is_remote,performance_rating
+E-1001,Aanya,Sharma,F,1992-04-18,aanya.sharma@acme.com,+91-98765-43210,Engineering,Data Analyst,2021-08-16,Full-time,125000,E-1000,Pune,TRUE,4.2
+E-1002,Rahul,Mehta,M,1988-11-02,rahul.mehta@acme.com,+91-98765-43211,Finance,Senior Accountant,2019-03-11,Full-time,98000,E-1008,Mumbai,FALSE,4
+E-1003,Meera,Iyer,F,1995-07-23,meera.iyer@acme.com,+91-98765-43212,HR,HR Business Partner,2022-01-10,Full-time,110000,E-1008,Delhi,TRUE,4.5
+E-1004,Arjun,Patel,M,1990-12-05,arjun.patel@acme.com,+91-98765-43213,Sales,Account Executive,2020-09-21,Full-time,135000,E-1009,Ahmedabad,FALSE,3.8
+E-1005,Neha,Verma,F,1993-03-14,neha.verma@acme.com,+91-98765-43214,Engineering,Software Engineer,2023-05-08,Contract,150000,E-1000,Bengaluru,TRUE,4.7
+E-1006,Karan,Joshi,M,1987-09-29,support@,+91-98765-43215,Support,Support Lead,2018-06-04,Full-time,87000,E-1007,Nashik,FALSE,3.9
+E-1007,Priya,Nair,F,1991-01-31,priya.nair@acme.com,,Operations,Operations Manager,2020-02-17,Full-time,123000,E-1008,Chennai,TRUE,4.1
+E-1008,Sameer,Khan,M,1985-05-20,sameer.khan@acme.com,+91-98765-43218,Executive,Director,2016-10-12,Full-time,210000,,Mumbai,FALSE,4.8
+E-1009,Anita,Rao,F,1994-10-09,anita.rao@acme.com,+91-98765-43219,Sales,Sales Manager,2019-11-25,Full-time,142000,E-1008,Hyderabad,TRUE,4.3
+E-1010,Vikram,Shah,M,1989-08-16,vikram.shah@acme.com,+91-98765-43220,Engineering,Data Engineer,2021-04-19,Part-time,119500,E-1001,Pune,TRUE,4

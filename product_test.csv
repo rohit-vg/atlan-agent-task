@@ -1,0 +1,11 @@
+sku,product_name,category,brand,price_usd,currency,stock_quantity,color,size,weight_kg,launch_date,discontinued,ean,warehouse,ratings_avg
+SKU-2001,UltraClean Bottle,Home & Kitchen,NorthPeak,24.99,USD,340,Blue,750ml,0.42,2024-02-15,FALSE,8901234567890,WH-A,4.6
+SKU-2002,ErgoDesk Lamp,Office,LightForge,49.5,USD,120,Black,Medium,1.15,2023-11-01,FALSE,8901234567891,WH-B,4.4
+SKU-2003,ProFit Mat,Fitness,FlexCore,39,USD,215,Green,Large,1.8,2024-01-20,FALSE,8901234567892,WH-A,4.7
+SKU-2004,CloudSound Speaker,Electronics,SoundNest,89.99,USD,75,White,One Size,0.95,2023-08-09,FALSE,8901234567893,WH-C,4.5
+SKU-2005,TravelMax Backpack,Accessories,RouteOne,62.25,USD,180,Red,42L,0.88,2024-03-12,FALSE,8901234567894,WH-B,4.3
+SKU-2006,KidsPuzzle 1000,Games,FunLoop,18.75,USD,0,Multicolor,1000pcs,0.65,2022-10-05,TRUE,8901234567895,WH-D,4.1
+SKU-2007,SmartBottle Gen2,Home & Kitchen,NorthPeak,-5,USD,14,Blue,650ml,0.39,2024-04-01,FALSE,8901234567896,WH-A,4
+SKU-2008,DeskPad Pro,Office,LightForge,29.99,USD,94,Gray,XL,0.72,2023-12-18,FALSE,8901234567897,WH-B,4.2
+SKU-2009,RunLite Shoes,Sports,FlexCore,79.9,USD,56,Black,42,0.91,2024-05-10,FALSE,8901234567898,WH-C,4.8
+SKU-2010,ZenMug,Home & Kitchen,NorthPeak,12.49,USD,510,White,350ml,0.31,2024-01-03,FALSE,8901234567899,WH-A,4.5
