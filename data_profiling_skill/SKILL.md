@@ -29,26 +29,23 @@ Perfect for any agent that needs to understand or govern data.
 
 ## Installation & Imports
 
-### As a module in your project:
-```python 
-from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
-from data_profiling_skill import ProfileAgent
-``` 
-
-### Use the full agent:
+### Import and use individual skill functions:
 ```python
-from data_profiling_skill import ProfileAgent
-agent = ProfileAgent() output_paths = agent.run("path/to/your/data.csv")
-# Returns: {"json_path": "...", "md_path": "..."}```
-```
+from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
 
-### Use individual functions:
-```python 
-from data_profiling_skill import load_csv, profile_column
 # Step 1: Load the CSV
-overview = load_csv("data.csv") print(f"Rows: {overview['shape']['rows']}, Columns: {overview['shape']['columns']}")
+overview = load_csv("data.csv")\
+print(f"Rows: {overview['shape']['rows']}, Columns: {overview['shape']['columns']}")
+
 # Step 2: Profile a specific column
-profile = profile_column("data.csv", "email_column") print(f"Null %: {profile['null_percentage']}") print(f"Unique values: {profile['unique_count']}")
+profile = profile_column("data.csv", "email_column")
+print(f"Null %: {profile['null_percentage']}")
+print(f"Unique values: {profile['unique_count']}")
+
+# Step 3: Validate a specific column
+profile = validate_column("data.csv", "email_column")
+print(f"Issues Found %: {profile['issues_found']}")
+print(f"Issues: {profile['issues']}")
 ``` 
 
 ---
@@ -97,7 +94,10 @@ Deep statistical analysis of a single column. Scans **all rows** for complete ac
 
 **Example:**
 ```python 
-profile = profile_column("data.csv", "customer_email") print(f"Nulls: {profile['null_percentage']}%") print(f"Uniqueness: {profile['uniqueness_percentage']}%") print(f"Samples: {profile['sample_values']}")
+profile = profile_column("data.csv", "customer_email")
+print(f"Nulls: {profile['null_percentage']}%")
+print(f"Uniqueness: {profile['uniqueness_percentage']}%")
+print(f"Samples: {profile['sample_values']}")
 ``` 
 
 ---
@@ -126,9 +126,15 @@ Comprehensive validation of a column for data quality issues. Scans **all rows**
 **Example:**
 ```python
 # Check for invalid emails
-validation = validate_column("data.csv", "email", "email") if validation["invalid_emails_count"] > 0: print(f"⚠️ Found {validation['invalid_emails_count']} invalid emails") for issue in validation["issues"][:3]: print(f" Row {issue['row']}: {issue['value']}")
+validation = validate_column("data.csv", "email", "email")
+if validation["invalid_emails_count"] > 0:
+  print(f"⚠️ Found {validation['invalid_emails_count']} invalid emails")
+  for issue in validation["issues"][:3]:
+    print(f" Row {issue['row']}: {issue['value']}")
 # Check for duplicates
-dupes = validate_column("data.csv", "user_id", "duplicates") if dupes["issues_found"] > 0: print(f"Found {len(dupes['issues'])} duplicate groups")
+dupes = validate_column("data.csv", "user_id", "duplicates")
+if dupes["issues_found"] > 0:
+  print(f"Found {len(dupes['issues'])} duplicate groups")
 ``` 
 
 ---
@@ -147,32 +153,9 @@ Save a full metadata catalog as JSON and Markdown files.
 
 **Example:**
 ```python
-paths = save_catalog(my_catalog) print(f"JSON: {paths['json_path']}") print(f"Report: {paths['md_path']}")
-``` 
-
----
-
-### `ProfileAgent` Class
-
-Two-phase orchestrator for end-to-end profiling and catalog synthesis.
-
-**Methods:**
-
-#### `__init__()`
-Initialize the agent (sets up Anthropic client).
-
-#### `run(filepath: str) → dict`
-Execute full pipeline: profile → synthesize → save
-
-- **Phase 1:** Profiles all columns via ReAct tool loop
-- **Phase 2:** Synthesizes metadata catalog via Claude LLM
-
-**Returns:** Dictionary with `json_path` and `md_path` of outputs
-
-**Example:**
-```python 
-from data_profiling_skill import ProfileAgent
-agent = ProfileAgent() output_paths = agent.run("sales_data.csv") print(f"✅ Catalog saved to {output_paths['md_path']}")
+paths = save_catalog(my_catalog)
+print(f"JSON: {paths['json_path']}")
+print(f"Report: {paths['md_path']}")
 ``` 
 
 ---
@@ -184,7 +167,6 @@ data_profiling_skill/
 ├── profiling.py # load_csv(), profile_column() 
 ├── validation.py # validate_column() with all validators 
 ├── catalog.py # save_catalog(), markdown generation 
-├── agent.py # ProfileAgent orchestrator 
 └── SKILL.md # This documentation``` 
 ```
 ---
@@ -196,18 +178,15 @@ Each function is **independent and reusable**:
 - Use `load_csv()` alone for quick dataset discovery
 - Chain `profile_column()` for each column
 - Add `validate_column()` for specific data quality checks
-- Or use `ProfileAgent` for the complete workflow
-
-### Two-Phase Agent Architecture
-The `ProfileAgent` follows a proven pattern:
-1. **Phase 1 (ReAct Loop):** Calls `load_csv` → `profile_column` for each column → `validate_column` for identified columns
-2. **Phase 2 (One-shot):** Hands all collected profiles to Claude to synthesize the final catalog JSON
-
-This avoids token budget conflicts when dealing with large datasets.
 
 ### Data Flow
 ```
-CSV File ↓ load_csv() → shape, columns, dtypes, nulls ↓ profile_column() → statistics, distribution, uniqueness [×N columns] ↓ validate_column() → quality issues with row numbers [×K validations] ↓ ProfileAgent (Phase 2) → Claude synthesizes metadata catalog ↓ save_catalog() → JSON + Markdown outputs
+CSV File
+↓ load_csv() → shape, columns, dtypes, nulls
+↓ profile_column() → statistics, distribution, uniqueness [×N columns]
+↓ validate_column() → quality issues with row numbers [×K validations]
+↓ YourAgent → Claude synthesizes metadata catalog
+↓ save_catalog() → JSON + Markdown outputs
 ```
 ---
 
@@ -247,15 +226,6 @@ for col, check_type in checks.items():
     result = validate_column("data.csv", col, check_type)
     if result["issues_found"] > 0:
         print(f"⚠️ {col}: {result['issues_found']} issues found")
-```
-
-### Workflow 3: Full Catalog Generation
-```python
-from data_profiling_skill import ProfileAgent
-
-agent = ProfileAgent()
-paths = agent.run("company_data.csv")
-print(f"✅ Catalog saved:\n  {paths['md_path']}\n  {paths['json_path']}")
 ```
 
 ### Integration with Claude Agents
@@ -338,7 +308,6 @@ else:
  
 ### Dependencies
 - **pandas** — CSV loading and analysis
-- **anthropic** — For ProfileAgent only (optional if using individual functions)
 - **Python 3.8+**
  
 ### What's Next?
@@ -351,7 +320,7 @@ After generating a catalog:
 6. **Integration** — Wire into data pipelines, dbt workflows, or data platforms
  
 ### Summary
-The **Data Profiling Skill** is a production-ready, modular system for understanding and cataloging data. Use individual functions for flexibility, or the `ProfileAgent` for turnkey end-to-end profiling.\
+The **Data Profiling Skill** is a production-ready, modular system for understanding and cataloging data. Use individual functions for flexibility.\
 **Key strengths**:
 - ✅ Self-contained and portable
 - ✅ Modular — use what you need

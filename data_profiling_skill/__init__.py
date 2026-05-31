@@ -11,7 +11,6 @@ This skill provides:
 
 Import patterns:
   from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
-  from data_profiling_skill.core import ProfileAgent
 """
 
 from .profiling import load_csv, profile_column
