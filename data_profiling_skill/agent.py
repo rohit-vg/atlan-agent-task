@@ -107,14 +107,13 @@ class ProfileAgent:
     def run(self, filepath: str) -> dict:
         """Profile a CSV and generate a full metadata catalog."""
         print(f"\n{'='*60}")
-        print(f"  🤖  CSV Catalog Agent  (two-phase)")
+        print(f"  🤖  CSV Catalog Agent")
         print(f"  📄  File : {filepath}")
         print(f"{'='*60}\n")
 
-        print("  📊  Phase 1 — Profiling columns\n")
+        print("  📊  Profiling columns\n")
         collected = self._run_profiling_phase(filepath)
 
-        print("  🗂️   Phase 2 — Synthesising catalog\n")
         catalog = self._run_synthesis_phase(filepath, collected)
 
         paths = save_catalog(catalog)
@@ -134,10 +133,9 @@ class ProfileAgent:
         )}]
 
         collected = {"overview": None, "column_profiles": {}}
-        MAX_ITERATIONS = 50
+        MAX_ITERATIONS = 30
 
         for iteration in range(1, MAX_ITERATIONS + 1):
-            print(f"  🔁  Profiling agent iteration {iteration}/{MAX_ITERATIONS}")
 
             response = self.client.messages.create(
                 model="claude-haiku-4-5",
@@ -169,7 +167,6 @@ class ProfileAgent:
                     if "error" in result:
                         raise RuntimeError(f"load_csv failed: {result['error']}")
                     collected["overview"] = result
-                    print(f"  🔧  load_csv → {result.get('shape', {})}")
 
                 elif block.name == "profile_column":
                     if "error" in result:
@@ -178,7 +175,6 @@ class ProfileAgent:
                     collected["column_profiles"][column_name] = result
                     null_pct = result.get("null_percentage", 0)
                     unique_n = result.get("unique_count", "?")
-                    print(f"  🔧  profile_column({column_name}) → nulls={null_pct}%  unique={unique_n}")
 
                 elif block.name == "validate_column":
                     if "error" in result:
@@ -186,7 +182,6 @@ class ProfileAgent:
                     column_name = result.get("column_name", "?")
                     validation_type = result.get("validation_type", "?")
                     issues = result.get("issues_found", 0)
-                    print(f"  🔧  validate_column({column_name}, {validation_type}) → {issues} issues found")
                     
                     if column_name in collected["column_profiles"]:
                         collected["column_profiles"][column_name]["validation_results"] = result
@@ -205,16 +200,6 @@ class ProfileAgent:
         """Synthesize final catalog from collected profiles."""
         overview  = collected.get("overview", {})
         profiles  = collected.get("column_profiles", {})
-
-        print("\n  📋  DEBUG: Validation results in collected data:")
-        for col_name, profile in profiles.items():
-            if "validation_results" in profile:
-                val_result = profile["validation_results"]
-                val_type = val_result.get('validation_type', '?')
-                issues = val_result.get('issues_found', 0)
-                print(f"      {col_name}: {val_type} validation - {issues} issues found")
-            else:
-                print(f"      {col_name}: NO validation performed")
         
         mandatory_facts = "VALIDATION FACTS (from automated scanning tool):\n\n"
         for col_name, profile in profiles.items():

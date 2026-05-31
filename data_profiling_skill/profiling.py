@@ -34,9 +34,8 @@ def load_csv(filepath: str) -> dict:
 
 def profile_column(filepath: str, column_name: str) -> dict:
     """
-    Return a detailed statistical profile for a single column:
-    nulls, uniqueness, sample values, numeric stats, value distribution.
-    Analyzes ALL rows for complete accuracy.
+    Return a detailed statistical profile for a single column.
+    Analyzes all rows for complete accuracy.
     
     Args:
         filepath: Path to CSV file
