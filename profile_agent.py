@@ -1,17 +1,25 @@
 """
 ProfileAgent — Two-phase catalog agent orchestrator.
 
-Phase 1: Collect all profiles via ReAct tool loop
-Phase 2: Synthesize final catalog JSON
+Main entry point for CSV data profiling and metadata catalog generation.
+
+Implements a ReAct-style agent that:
+  Phase 1: Profiles CSV columns via tool loop
+  Phase 2: Synthesizes metadata catalog via LLM
 """
 
+import os
+import sys
+
+from dotenv import load_dotenv
 import anthropic
 import json
 import re
 
-from .profiling import load_csv, profile_column
-from .validation import validate_column
-from .catalog import save_catalog
+from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 PROFILING_TOOLS = [
@@ -136,7 +144,6 @@ class ProfileAgent:
         MAX_ITERATIONS = 30
 
         for iteration in range(1, MAX_ITERATIONS + 1):
-
             response = self.client.messages.create(
                 model="claude-haiku-4-5",
                 max_tokens=8192,
@@ -146,9 +153,6 @@ class ProfileAgent:
             )
 
             if response.stop_reason == "end_turn":
-                profiled_count = len(collected['column_profiles'])
-                overview_cols = len(collected.get('overview', {}).get('columns', []))
-                print(f"\n  ✅  Profiling done — {profiled_count} columns profiled (expected: {overview_cols})\n")
                 return collected
 
             if response.stop_reason != "tool_use":
@@ -163,26 +167,16 @@ class ProfileAgent:
 
                 result = self._dispatch(block.name, block.input)
 
-                if block.name == "load_csv":
-                    if "error" in result:
-                        raise RuntimeError(f"load_csv failed: {result['error']}")
-                    collected["overview"] = result
+                if "error" in result and block.name in ["load_csv", "profile_column", "validate_column"]:
+                    raise RuntimeError(f"{block.name} failed: {result['error']}")
 
+                if block.name == "load_csv":
+                    collected["overview"] = result
                 elif block.name == "profile_column":
-                    if "error" in result:
-                        raise RuntimeError(f"profile_column failed: {result['error']}")
                     column_name = result.get("column_name", "?")
                     collected["column_profiles"][column_name] = result
-                    null_pct = result.get("null_percentage", 0)
-                    unique_n = result.get("unique_count", "?")
-
                 elif block.name == "validate_column":
-                    if "error" in result:
-                        raise RuntimeError(f"validate_column failed: {result['error']}")
                     column_name = result.get("column_name", "?")
-                    validation_type = result.get("validation_type", "?")
-                    issues = result.get("issues_found", 0)
-                    
                     if column_name in collected["column_profiles"]:
                         collected["column_profiles"][column_name]["validation_results"] = result
 
@@ -198,8 +192,8 @@ class ProfileAgent:
 
     def _run_synthesis_phase(self, filepath: str, collected: dict) -> dict:
         """Synthesize final catalog from collected profiles."""
-        overview  = collected.get("overview", {})
-        profiles  = collected.get("column_profiles", {})
+        overview = collected.get("overview", {})
+        profiles = collected.get("column_profiles", {})
         
         mandatory_facts = "VALIDATION FACTS (from automated scanning tool):\n\n"
         for col_name, profile in profiles.items():
@@ -248,19 +242,14 @@ class ProfileAgent:
         raw = re.sub(r"\s*```$", "", raw)
 
         try:
-            catalog = json.loads(raw)
-            print("  ✅  Catalog JSON parsed successfully\n")
-            return catalog
+            return json.loads(raw)
         except json.JSONDecodeError as e:
-            print(f"  ⚠️  JSON parse error: {e}")
             fixed = raw
             fixed = re.sub(r',(\s*[}\]])', r'\1', fixed)
             fixed = re.sub(r'([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)', r'\1"\2"\3', fixed)
             
             try:
-                catalog = json.loads(fixed)
-                print("  ✅  Fixed and parsed successfully\n")
-                return catalog
+                return json.loads(fixed)
             except json.JSONDecodeError as e2:
                 raise RuntimeError(f"Failed to parse catalog JSON: {e2}")
 
@@ -273,3 +262,26 @@ class ProfileAgent:
         if name == "validate_column":
             return validate_column(inputs["filepath"], inputs["column_name"], inputs["validation_type"])
         return {"error": f"Unknown tool: {name}"}
+
+
+if __name__ == "__main__":
+    # Verify API key is loaded
+    if not os.getenv("ANTHROPIC_API_KEY"):
+        print("❌ ANTHROPIC_API_KEY not found.")
+        print("   Create a .env file with: ANTHROPIC_API_KEY=sk-ant-...")
+        exit(1)
+
+    # Resolve filepath
+    if len(sys.argv) >= 2:
+        filepath = sys.argv[1]
+    else:
+        filepath = "input/sample_data.csv"
+
+    agent = ProfileAgent()
+    result = agent.run(filepath=filepath)
+    
+    print("\n" + "="*70)
+    print("✨ Profiling complete!")
+    print(f"📄 JSON Catalog: {result['json_path']}")
+    print(f"📝 Markdown Report: {result['md_path']}")
+    print("="*70)
