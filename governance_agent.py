@@ -16,7 +16,7 @@ import anthropic
 import json
 import re
 
-from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
+from governance_skills import load_csv, profile_column, validate_column, save_catalog
 
 # Load environment variables from .env file
 load_dotenv()

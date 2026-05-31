@@ -10,7 +10,7 @@ This skill provides:
   - Catalog synthesis and reporting (JSON + Markdown)
 
 Import patterns:
-  from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
+  from governance_skills import load_csv, profile_column, validate_column, save_catalog
 """
 
 from .profiling import load_csv, profile_column

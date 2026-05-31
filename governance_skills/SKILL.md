@@ -30,12 +30,13 @@ Perfect for any agent that needs to understand or govern data.
 ## Installation & Imports
 
 ### Import and use individual skill functions:
+
 ```python
-from data_profiling_skill import load_csv, profile_column, validate_column, save_catalog
+from governance_skills import load_csv, profile_column, validate_column, save_catalog
 
 # Step 1: Load the CSV
-overview = load_csv("data.csv")\
-print(f"Rows: {overview['shape']['rows']}, Columns: {overview['shape']['columns']}")
+overview = load_csv("data.csv")
+  print(f"Rows: {overview['shape']['rows']}, Columns: {overview['shape']['columns']}")
 
 # Step 2: Profile a specific column
 profile = profile_column("data.csv", "email_column")
@@ -195,7 +196,7 @@ CSV File
 ### Workflow 1: Quick Data Understanding
 
 ```python
-from data_profiling_skill import load_csv, profile_column
+from governance_skills import load_csv, profile_column
 
 # Overview
 overview = load_csv("dataset.csv")
@@ -204,57 +205,59 @@ print(f"Columns: {', '.join(overview['columns'])}")
 
 # Profile key columns
 for col in ["email", "phone", "created_at"]:
-    if col in overview['columns']:
-        profile = profile_column("dataset.csv", col)
-        print(f"\n{col}:")
-        print(f"  Nulls: {profile['null_percentage']}%")
-        print(f"  Unique: {profile['uniqueness_percentage']}%")
+  if col in overview['columns']:
+    profile = profile_column("dataset.csv", col)
+    print(f"\n{col}:")
+    print(f"  Nulls: {profile['null_percentage']}%")
+    print(f"  Unique: {profile['uniqueness_percentage']}%")
 ```
 
 ### Workflow 2: Data Quality Audit
+
 ```python
-from data_profiling_skill import validate_column
+from governance_skills import validate_column
 
 checks = {
-    "email": "email",
-    "phone": "phone",
-    "customer_id": "duplicates",
-    "name": "null_check"
+  "email": "email",
+  "phone": "phone",
+  "customer_id": "duplicates",
+  "name": "null_check"
 }
 
 for col, check_type in checks.items():
-    result = validate_column("data.csv", col, check_type)
-    if result["issues_found"] > 0:
-        print(f"⚠️ {col}: {result['issues_found']} issues found")
+  result = validate_column("data.csv", col, check_type)
+  if result["issues_found"] > 0:
+    print(f"⚠️ {col}: {result['issues_found']} issues found")
 ```
 
 ### Integration with Claude Agents
 This skill is designed to be imported by any Claude agent as a reusable tool library:
+
 ```python
 # In your agent code
-from data_profiling_skill import load_csv, profile_column, validate_column
+from governance_skills import load_csv, profile_column, validate_column
 
 # Register tools
 TOOLS = [
-    {
-        "name": "load_csv",
-        "description": "Load CSV and get shape, columns, dtypes, nulls, sample rows",
-        "input_schema": {...}
-    },
-    {
-        "name": "profile_column",
-        "description": "Deep profile of one column: nulls, uniqueness, stats, distribution",
-        "input_schema": {...}
-    },
-    # ... etc
+  {
+    "name": "load_csv",
+    "description": "Load CSV and get shape, columns, dtypes, nulls, sample rows",
+    "input_schema": {...}
+  },
+  {
+    "name": "profile_column",
+    "description": "Deep profile of one column: nulls, uniqueness, stats, distribution",
+    "input_schema": {...}
+  },
+  # ... etc
 ]
 
 
 # In your tool dispatcher
 def dispatch(tool_name, inputs):
-    if tool_name == "load_csv":
-        return load_csv(inputs["filepath"])
-    # ... etc
+  if tool_name == "load_csv":
+    return load_csv(inputs["filepath"])
+  # ... etc
 ```
 
  
