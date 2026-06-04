@@ -2,8 +2,19 @@
 Comprehensive column validation: email, phone, duplicates, nulls.
 """
 
-import pandas as pd
 import re
+
+import pandas as pd
+
+# Simple cache for the DataFrame
+_DF_CACHE = {}
+
+
+def _get_df(filepath: str) -> pd.DataFrame:
+    """Helper to get or load the dataframe."""
+    if filepath not in _DF_CACHE:
+        _DF_CACHE[filepath] = pd.read_csv(filepath)
+    return _DF_CACHE[filepath]
 
 
 def validate_column(filepath: str, column_name: str, validation_type: str) -> dict:
@@ -19,7 +30,7 @@ def validate_column(filepath: str, column_name: str, validation_type: str) -> di
         dict with validation results and all violations listed with row numbers
     """
     try:
-        df = pd.read_csv(filepath)
+        df = _get_df(filepath)
     except Exception as e:
         return {"error": str(e)}
 
@@ -43,84 +54,103 @@ def validate_column(filepath: str, column_name: str, validation_type: str) -> di
         return _validate_duplicates(col, results)
     elif validation_type == "null_check":
         return _validate_nulls(col, results)
-    
+
     return {"error": f"Unknown validation_type: {validation_type}"}
 
 
 def _validate_email(col: pd.Series, results: dict) -> dict:
-    """Validate email format (RFC 5322 simplified)."""
-    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    
+    """Validate email format with stricter checks."""
+    # Stricter regex to ensure domain has at least one character before the dot, and a valid TLD
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+
+    # Custom check: ensure domain part doesn't start/end with dot
+    def is_valid_format(email):
+        if not re.match(email_pattern, email):
+            return False
+        # Specific check for "user@.com" or "user@domain..com"
+        domain_part = email.split("@")[1]
+        if domain_part.startswith(".") or ".." in domain_part:
+            return False
+        return True
+
     invalid_emails = []
     duplicate_emails = {}
     valid_emails = []
-    
+
     for idx, value in col.items():
         if pd.isna(value):
             continue
-        
+
         value_str = str(value).strip()
-        
-        if not re.match(email_pattern, value_str):
-            invalid_emails.append({
-                "row": int(idx) + 1,
-                "value": value_str,
-                "issue": "Invalid email format (does not match RFC 5322 pattern)"
-            })
+
+        if not is_valid_format(value_str):
+            invalid_emails.append(
+                {
+                    "row": int(idx) + 1,
+                    "value": value_str,
+                    "issue": "Invalid email format",
+                }
+            )
         else:
             if value_str in duplicate_emails:
                 duplicate_emails[value_str].append(int(idx) + 1)
             else:
                 duplicate_emails[value_str] = [int(idx) + 1]
             valid_emails.append(value_str)
-    
+
     results["invalid_emails_count"] = len(invalid_emails)
     results["issues"].extend(invalid_emails)
-    
-    duplicate_valid_emails = {email: rows for email, rows in duplicate_emails.items() if len(rows) > 1}
+
+    duplicate_valid_emails = {
+        email: rows for email, rows in duplicate_emails.items() if len(rows) > 1
+    }
     results["duplicate_valid_emails_count"] = len(duplicate_valid_emails)
     for email, row_numbers in duplicate_valid_emails.items():
-        results["issues"].append({
-            "value": email,
-            "issue_type": "duplicate_valid_email",
-            "occurrence_count": len(row_numbers),
-            "row_numbers": row_numbers
-        })
-    
+        results["issues"].append(
+            {
+                "value": email,
+                "issue_type": "duplicate_valid_email",
+                "occurrence_count": len(row_numbers),
+                "row_numbers": row_numbers,
+            }
+        )
+
     results["issues_found"] = len(invalid_emails) + len(duplicate_valid_emails)
     results["valid_emails_count"] = len(set(valid_emails))
     results["invalid_emails"] = [item["value"] for item in invalid_emails]
-    
+
     return results
 
 
 def _validate_phone(col: pd.Series, results: dict) -> dict:
     """Validate phone format (flexible)."""
-    phone_pattern = r'^[\+]?[\d\s\-\(\)\.]{7,}$'
-    
+    phone_pattern = r"^[\+]?[\d\s\-\(\)\.]{7,}$"
+
     invalid_phones = []
     valid_phones = []
-    
+
     for idx, value in col.items():
         if pd.isna(value):
             continue
-        
+
         value_str = str(value).strip()
-        
+
         if not re.match(phone_pattern, value_str):
-            invalid_phones.append({
-                "row": int(idx) + 1,
-                "value": value_str,
-                "issue": "Invalid phone format"
-            })
+            invalid_phones.append(
+                {
+                    "row": int(idx) + 1,
+                    "value": value_str,
+                    "issue": "Invalid phone format",
+                }
+            )
         else:
             valid_phones.append(value_str)
-    
+
     results["invalid_phones_count"] = len(invalid_phones)
     results["issues"].extend(invalid_phones)
     results["valid_phones_count"] = len(set(valid_phones))
     results["issues_found"] = len(invalid_phones)
-    
+
     return results
 
 
@@ -130,11 +160,13 @@ def _validate_duplicates(col: pd.Series, results: dict) -> dict:
     for value, count in duplicates.items():
         if count > 1:
             row_numbers = col[col == value].index.tolist()
-            results["issues"].append({
-                "value": str(value),
-                "occurrence_count": int(count),
-                "row_numbers": [int(r) + 1 for r in row_numbers]
-            })
+            results["issues"].append(
+                {
+                    "value": str(value),
+                    "occurrence_count": int(count),
+                    "row_numbers": [int(r) + 1 for r in row_numbers],
+                }
+            )
     results["issues_found"] = len(results["issues"])
     return results
 
@@ -143,10 +175,12 @@ def _validate_nulls(col: pd.Series, results: dict) -> dict:
     """Find all null/empty values."""
     for idx, value in col.items():
         if pd.isna(value) or str(value).strip() == "":
-            results["issues"].append({
-                "row": int(idx) + 1,
-                "value": str(value) if not pd.isna(value) else "NULL"
-            })
+            results["issues"].append(
+                {
+                    "row": int(idx) + 1,
+                    "value": str(value) if not pd.isna(value) else "NULL",
+                }
+            )
     results["issues_found"] = len(results["issues"])
     results["non_null_count"] = len(col.dropna())
     return results

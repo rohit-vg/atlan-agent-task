@@ -13,9 +13,9 @@ Import patterns:
   from governance_skills import load_csv, profile_column, validate_column, save_catalog
 """
 
-from .profiling import load_csv, profile_column
-from .validation import validate_column
 from .catalog import save_catalog
+from .profiling import get_dataset_profile, load_csv, profile_column
+from .validation import validate_column
 
 __version__ = "1.0.0"
 __all__ = [
