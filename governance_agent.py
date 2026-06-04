@@ -8,18 +8,17 @@ Implements a ReAct-style agent that:
   Phase 2: Synthesizes metadata catalog via LLM
 """
 
+# from dotenv import load_dotenv
+import json
 import os
+import re
 import sys
 
-from dotenv import load_dotenv
-import anthropic
-import json
-import re
-
-from governance_skills import load_csv, profile_column, validate_column, save_catalog
+from config import MODEL, client
+from governance_skills import load_csv, profile_column, save_catalog, validate_column
 
 # Load environment variables from .env file
-load_dotenv()
+# load_dotenv()
 
 
 PROFILING_TOOLS = [
@@ -31,9 +30,7 @@ PROFILING_TOOLS = [
         ),
         "input_schema": {
             "type": "object",
-            "properties": {
-                "filepath": {"type": "string"}
-            },
+            "properties": {"filepath": {"type": "string"}},
             "required": ["filepath"],
         },
     },
@@ -47,7 +44,7 @@ PROFILING_TOOLS = [
         "input_schema": {
             "type": "object",
             "properties": {
-                "filepath":    {"type": "string"},
+                "filepath": {"type": "string"},
                 "column_name": {"type": "string"},
             },
             "required": ["filepath", "column_name"],
@@ -63,12 +60,12 @@ PROFILING_TOOLS = [
         "input_schema": {
             "type": "object",
             "properties": {
-                "filepath":        {"type": "string"},
-                "column_name":     {"type": "string"},
+                "filepath": {"type": "string"},
+                "column_name": {"type": "string"},
                 "validation_type": {
                     "type": "string",
-                    "enum": ["email", "phone", "duplicates", "null_check"]
-                }
+                    "enum": ["email", "phone", "duplicates", "null_check"],
+                },
             },
             "required": ["filepath", "column_name", "validation_type"],
         },
@@ -108,16 +105,16 @@ Root object: { "source_file": "<filename>", "total_rows": <int>, "columns": [...
 
 class ProfileAgent:
     """Orchestrates two-phase data profiling and catalog synthesis."""
-    
+
     def __init__(self):
-        self.client = anthropic.Anthropic()
-    
+        self.client = client
+
     def run(self, filepath: str) -> dict:
         """Profile a CSV and generate a full metadata catalog."""
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"  🤖  CSV Catalog Agent")
         print(f"  📄  File : {filepath}")
-        print(f"{'='*60}\n")
+        print(f"{'=' * 60}\n")
 
         print("  📊  Profiling columns\n")
         collected = self._run_profiling_phase(filepath)
@@ -126,26 +123,31 @@ class ProfileAgent:
 
         paths = save_catalog(catalog)
         return paths
-    
+
     def _run_profiling_phase(self, filepath: str) -> dict:
         """Run ReAct tool loop to collect all profiles."""
-        messages = [{"role": "user", "content": (
-            f"Profile the CSV at: {filepath}\n"
-            "REQUIRED STEPS:\n"
-            "1. load_csv to discover all columns\n"
-            "2. profile_column for EVERY column\n"
-            "3. Identify columns needing validation (emails, phones, potential duplicates)\n"
-            "4. Call validate_column for each identified column\n"
-            "5. Stop when all validations are complete\n\n"
-            "Do not finish until all appropriate validations are complete."
-        )}]
+        messages = [
+            {
+                "role": "user",
+                "content": (
+                    f"Profile the CSV at: {filepath}\n"
+                    "REQUIRED STEPS:\n"
+                    "1. load_csv to discover all columns\n"
+                    "2. profile_column for EVERY column\n"
+                    "3. Identify columns needing validation (emails, phones, potential duplicates)\n"
+                    "4. Call validate_column for each identified column\n"
+                    "5. Stop when all validations are complete\n\n"
+                    "Do not finish until all appropriate validations are complete."
+                ),
+            }
+        ]
 
         collected = {"overview": None, "column_profiles": {}}
         MAX_ITERATIONS = 30
 
         for iteration in range(1, MAX_ITERATIONS + 1):
             response = self.client.messages.create(
-                model="claude-haiku-4-5",
+                model=MODEL,
                 max_tokens=8192,
                 system=PHASE1_SYSTEM,
                 tools=PROFILING_TOOLS,
@@ -156,7 +158,9 @@ class ProfileAgent:
                 return collected
 
             if response.stop_reason != "tool_use":
-                raise RuntimeError(f"Unexpected profiling stop reason: {response.stop_reason}")
+                raise RuntimeError(
+                    f"Unexpected profiling stop reason: {response.stop_reason}"
+                )
 
             messages.append({"role": "assistant", "content": response.content})
             tool_results = []
@@ -167,7 +171,11 @@ class ProfileAgent:
 
                 result = self._dispatch(block.name, block.input)
 
-                if "error" in result and block.name in ["load_csv", "profile_column", "validate_column"]:
+                if "error" in result and block.name in [
+                    "load_csv",
+                    "profile_column",
+                    "validate_column",
+                ]:
                     raise RuntimeError(f"{block.name} failed: {result['error']}")
 
                 if block.name == "load_csv":
@@ -178,38 +186,46 @@ class ProfileAgent:
                 elif block.name == "validate_column":
                     column_name = result.get("column_name", "?")
                     if column_name in collected["column_profiles"]:
-                        collected["column_profiles"][column_name]["validation_results"] = result
+                        collected["column_profiles"][column_name][
+                            "validation_results"
+                        ] = result
 
-                tool_results.append({
-                    "type": "tool_result",
-                    "tool_use_id": block.id,
-                    "content": json.dumps(result, default=str, ensure_ascii=False),
-                })
+                tool_results.append(
+                    {
+                        "type": "tool_result",
+                        "tool_use_id": block.id,
+                        "content": json.dumps(result, default=str, ensure_ascii=False),
+                    }
+                )
 
             messages.append({"role": "user", "content": tool_results})
 
-        raise RuntimeError(f"Profiling did not complete within {MAX_ITERATIONS} iterations.")
+        raise RuntimeError(
+            f"Profiling did not complete within {MAX_ITERATIONS} iterations."
+        )
 
     def _run_synthesis_phase(self, filepath: str, collected: dict) -> dict:
         """Synthesize final catalog from collected profiles."""
         overview = collected.get("overview", {})
         profiles = collected.get("column_profiles", {})
-        
+
         mandatory_facts = "VALIDATION FACTS (from automated scanning tool):\n\n"
         for col_name, profile in profiles.items():
             if "validation_results" in profile:
                 val_result = profile["validation_results"]
                 val_type = val_result.get("validation_type", "")
-                
+
                 if val_type == "email":
-                    invalid_count = val_result.get('invalid_emails_count', 0)
-                    duplicate_count = val_result.get('duplicate_valid_emails_count', 0)
-                    valid_count = val_result.get('valid_emails_count', 0)
-                    
+                    invalid_count = val_result.get("invalid_emails_count", 0)
+                    duplicate_count = val_result.get("duplicate_valid_emails_count", 0)
+                    valid_count = val_result.get("valid_emails_count", 0)
+
                     mandatory_facts += f"{col_name.upper()}:\n"
                     if invalid_count > 0:
-                        invalid_vals = val_result.get('invalid_emails', [])
-                        mandatory_facts += f"  ❌ INVALID EMAILS: {invalid_count} entries\n"
+                        invalid_vals = val_result.get("invalid_emails", [])
+                        mandatory_facts += (
+                            f"  ❌ INVALID EMAILS: {invalid_count} entries\n"
+                        )
                         mandatory_facts += f"     Examples: {invalid_vals[:3]}\n"
                     else:
                         mandatory_facts += f"  ✅ All emails valid\n"
@@ -231,27 +247,83 @@ class ProfileAgent:
         print("  🧠  Synthesising catalog…")
 
         response = self.client.messages.create(
-            model="claude-haiku-4-5",
+            model=MODEL,
             max_tokens=16384,
             system=SYNTHESIS_SYSTEM,
             messages=[{"role": "user", "content": user_msg}],
         )
 
-        raw = response.content[0].text.strip()
-        raw = re.sub(r"^```(?:json)?\s*", "", raw)
-        raw = re.sub(r"\s*```$", "", raw)
+        parts = []
+        for block in response.content:
+            if hasattr(block, "text") and block.text:
+                parts.append(block.text)
+            elif hasattr(block, "thinking") and block.thinking:
+                continue
+            else:
+                try:
+                    parts.append(str(block))
+                except Exception:
+                    pass
+
+        raw = "\n".join(parts).strip()
+        print(f"raw: {raw}")
+        raw = re.sub(r"^\`\`(?:json)?\s*", "", raw)
+        raw = re.sub(r"\s*\`\`$", "", raw)
+
+        def extract_json_object(text: str) -> str | None:
+            start = text.find("{")
+            if start == -1:
+                return None
+
+            depth = 0
+            in_string = False
+            escape = False
+
+            for i in range(start, len(text)):
+                ch = text[i]
+
+                if in_string:
+                    if escape:
+                        escape = False
+                    elif ch == "\\":
+                        escape = True
+                    elif ch == '"':
+                        in_string = False
+                    continue
+
+                if ch == '"':
+                    in_string = True
+                elif ch == "{":
+                    depth += 1
+                elif ch == "}":
+                    depth -= 1
+                    if depth == 0:
+                        return text[start : i + 1]
+
+            return None
+
+        json_text = extract_json_object(raw)
+        if not json_text:
+            raise RuntimeError(
+                f"No JSON object found in model output. Raw output: {raw[:2000]}"
+            )
 
         try:
-            return json.loads(raw)
+            return json.loads(json_text)
         except json.JSONDecodeError as e:
-            fixed = raw
-            fixed = re.sub(r',(\s*[}\]])', r'\1', fixed)
-            fixed = re.sub(r'([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)', r'\1"\2"\3', fixed)
-            
+            fixed = json_text
+            fixed = re.sub(r",(\s*[}\]])", r"\1", fixed)
+            fixed = re.sub(
+                r"([{|,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)",
+                r'\1"\2"\3',
+                fixed,
+            )
             try:
                 return json.loads(fixed)
-            except json.JSONDecodeError as e2:
-                raise RuntimeError(f"Failed to parse catalog JSON: {e2}")
+            except json.JSONDecodeError as e:
+                raise RuntimeError(
+                    f"Failed to parse catalog JSON: {e}. Raw output: {raw[:2000]}"
+                )
 
     def _dispatch(self, name: str, inputs: dict):
         """Dispatch tool calls to their implementations."""
@@ -260,16 +332,18 @@ class ProfileAgent:
         if name == "profile_column":
             return profile_column(inputs["filepath"], inputs["column_name"])
         if name == "validate_column":
-            return validate_column(inputs["filepath"], inputs["column_name"], inputs["validation_type"])
+            return validate_column(
+                inputs["filepath"], inputs["column_name"], inputs["validation_type"]
+            )
         return {"error": f"Unknown tool: {name}"}
 
 
 if __name__ == "__main__":
     # Verify API key is loaded
-    if not os.getenv("ANTHROPIC_API_KEY"):
-        print("❌ ANTHROPIC_API_KEY not found.")
-        print("   Create a .env file with: ANTHROPIC_API_KEY=sk-ant-...")
-        exit(1)
+    # if not os.getenv("API_KEY"):
+    #     print("❌ API_KEY not found.")
+    #     print("   Create a .env file with: API_KEY=...")
+    #     exit(1)
 
     # Resolve filepath
     if len(sys.argv) >= 2:
@@ -279,9 +353,9 @@ if __name__ == "__main__":
 
     agent = ProfileAgent()
     result = agent.run(filepath=filepath)
-    
-    print("\n" + "="*70)
+
+    print("\n" + "=" * 70)
     print("✨ Profiling complete!")
     print(f"📄 JSON Catalog: {result['json_path']}")
     print(f"📝 Markdown Report: {result['md_path']}")
-    print("="*70)
+    print("=" * 70)

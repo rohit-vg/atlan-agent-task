@@ -10,11 +10,11 @@ from datetime import datetime
 def save_catalog(catalog: dict, output_dir: str = "output") -> dict:
     """
     Save the final catalog as both JSON and human-readable Markdown.
-    
+
     Args:
         catalog: Full catalog dict to save
         output_dir: Directory for output files
-        
+
     Returns:
         dict with paths to generated JSON and Markdown files
     """
@@ -23,7 +23,7 @@ def save_catalog(catalog: dict, output_dir: str = "output") -> dict:
     source = os.path.basename(catalog.get("source_file", "dataset"))
 
     json_path = f"{output_dir}/catalog_{source}_{timestamp}.json"
-    md_path   = f"{output_dir}/catalog_{source}_{timestamp}.md"
+    md_path = f"{output_dir}/catalog_{source}_{timestamp}.md"
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(catalog, f, indent=2, default=str, ensure_ascii=False)
@@ -36,9 +36,9 @@ def save_catalog(catalog: dict, output_dir: str = "output") -> dict:
 
 def _build_markdown(catalog: dict) -> str:
     """Generate human-readable Markdown report from catalog."""
-    source   = catalog.get("source_file", "Unknown")
-    rows     = catalog.get("total_rows", "?")
-    cols     = catalog.get("columns", [])
+    source = catalog.get("source_file", "Unknown")
+    rows = catalog.get("total_rows", "?")
+    cols = catalog.get("columns", [])
     generated = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     PII_EMOJI = {"none": "✅", "low": "🟡", "medium": "🟠", "high": "🔴"}
@@ -49,7 +49,7 @@ def _build_markdown(catalog: dict) -> str:
         f"| | |",
         f"|---|---|",
         f"| **Generated** | {generated} |",
-        f"| **Rows** | {rows:,} |",
+        f"| **Rows** | {rows} |",
         f"| **Columns** | {len(cols)} |",
         f"",
         "---",
@@ -60,7 +60,7 @@ def _build_markdown(catalog: dict) -> str:
 
     for col in cols:
         name = col.get("name", "?")
-        pii  = col.get("pii_risk", "none")
+        pii = col.get("pii_risk", "none")
 
         lines += [
             f"### `{name}`  {PII_EMOJI.get(pii, '❓')}",
@@ -85,7 +85,9 @@ def _build_markdown(catalog: dict) -> str:
 
         if col.get("stats"):
             s = col["stats"]
-            lines.append(f"| **Stats** | min={s.get('min')}  max={s.get('max')}  mean={s.get('mean')} |")
+            lines.append(
+                f"| **Stats** | min={s.get('min')}  max={s.get('max')}  mean={s.get('mean')} |"
+            )
 
         lines.append("")
 
@@ -97,12 +99,16 @@ def _build_markdown(catalog: dict) -> str:
 
         samples = col.get("sample_values", [])
         if samples:
-            lines.append(f"**Sample values:** `{'`, `'.join(str(v) for v in samples[:6])}`")
+            lines.append(
+                f"**Sample values:** `{'`, `'.join(str(v) for v in samples[:6])}`"
+            )
             lines.append("")
 
         constraints = col.get("recommended_constraints", [])
         if constraints:
-            lines.append(f"**Recommended constraints:** {', '.join(f'`{c}`' for c in constraints)}")
+            lines.append(
+                f"**Recommended constraints:** {', '.join(f'`{c}`' for c in constraints)}"
+            )
             lines.append("")
 
         if col.get("quality_observations"):
