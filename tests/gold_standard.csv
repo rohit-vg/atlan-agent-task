@@ -1,0 +1,5 @@
+id,email,phone,notes
+1,valid@email.com,1234567890,ok
+2,invalid_email,9876543210,bad_email
+3,valid@email.com,555-555-5555,duplicate_email
+4,missing@email.com,,null_phone
