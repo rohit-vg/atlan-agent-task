@@ -3,10 +3,12 @@ Core profiling functions: load_csv and profile_column.
 These analyze CSV structure and column statistics.
 """
 
+import math
+
 import pandas as pd
 
 # Simple cache for the DataFrame
-_DF_CACHE = {}
+_DF_CACHE: dict = {}
 
 
 def _get_df(filepath: str) -> pd.DataFrame:
@@ -75,6 +77,12 @@ def profile_column_from_df(df: pd.DataFrame, column_name: str) -> dict:
         "sample_values": [str(v) for v in col.dropna().head(20).tolist()],
     }
 
+    LOW_CARDINALITY_THRESHOLD = 50
+    if col.nunique() <= LOW_CARDINALITY_THRESHOLD:
+        profile["value_distribution"] = (
+            col.value_counts(dropna=False).head(50).to_dict()
+        )
+
     if pd.api.types.is_numeric_dtype(col):
         desc = col.describe()
         profile["numeric_stats"] = {
@@ -99,6 +107,7 @@ def profile_column(filepath: str, column_name: str) -> dict:
 def _safe_float(val) -> float | None:
     """Convert value to float safely, returns None on failure."""
     try:
-        return round(float(val), 4)
+        f = float(val)
+        return None if (pd.isna(f) or math.isinf(f)) else round(f, 4)
     except (TypeError, ValueError):
         return None

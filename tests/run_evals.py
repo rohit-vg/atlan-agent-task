@@ -25,20 +25,38 @@ def run_evals():
     # - 'phone' column should have 1 null
 
     errors = []
-    email_col = next((c for c in catalog["columns"] if c["name"] == "email"), None)
+    catalog_cols = {c["name"]: c for c in catalog["columns"]}
+    email_col = catalog_cols.get("email")
+    phone_col = catalog_cols.get("phone")
+
+    # 1. "overall_quality_score" in catalog
+    if "overall_quality_score" not in catalog:
+        errors.append("overall_quality_score not found in catalog")
 
     if not email_col:
         errors.append("Email column not found in catalog")
     else:
-        # Check if the agent reported any issues for the email column
-        issues = email_col.get("quality_observations", [])
-
-        # Verify that the agent identified the issue
-        has_issue = any("invalid" in str(i).lower() for i in issues)
-        if not has_issue:
+        # 2. email_col["pii_risk"] in ("medium", "high")
+        if email_col.get("pii_risk") not in ("medium", "high"):
             errors.append(
-                f"Failed to detect invalid email format. Issues reported: {issues}"
+                f"Expected email pii_risk to be medium/high, got: {email_col.get('pii_risk')}"
             )
+
+        # 3. any("EMAIL" in c.upper() for c in email_col.get("recommended_constraints", []))
+        constraints = email_col.get("recommended_constraints", [])
+        if not any("EMAIL" in c.upper() for c in constraints):
+            errors.append(f"Email column missing EMAIL constraint. Got: {constraints}")
+
+        # 4. email_col.get("quality_score", 100) < 80   (warning only)
+        if email_col.get("quality_score", 100) >= 80:
+            print("  ⚠️  WARN: Email quality_score >= 80")
+
+    if not phone_col:
+        errors.append("Phone column not found in catalog")
+    else:
+        # 5. phone_col.get("null_percentage", 0) > 0     (warning only)
+        if phone_col.get("null_percentage", 0) == 0:
+            print("  ⚠️  WARN: Phone null_percentage is 0")
 
     if errors:
         print("\n❌ Evaluation FAILED:")
