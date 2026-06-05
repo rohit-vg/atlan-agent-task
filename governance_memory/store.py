@@ -15,8 +15,10 @@ class SQLiteEpisodeStore:
         self._init_db()
 
     def _get_connection(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(self.db_path, check_same_thread=False)
         conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA journal_mode=WAL")  # IMPROVEMENT: WAL for concurrency
+        conn.execute("PRAGMA foreign_keys=ON")
         return conn
 
     def _init_db(self):
@@ -50,6 +52,14 @@ class SQLiteEpisodeStore:
                     FOREIGN KEY(episode_id) REFERENCES episodes(id) ON DELETE CASCADE
                 )
             """)
+
+            # IMPROVEMENT: Add indexes for performance
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_steps_episode ON steps(episode_id)"
+            )
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_episodes_status ON episodes(status)"
+            )
             conn.commit()
 
     def create_episode(self, episode_id: str, filepath: str, summary: str = "") -> None:
@@ -176,3 +186,35 @@ class SQLiteEpisodeStore:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM episodes ORDER BY timestamp DESC")
             return [dict(row) for row in cursor.fetchall()]
+
+    def get_feedback_stats(self) -> Optional[Dict]:
+        """Aggregate feedback for feedback-loop nudge in synthesis."""
+        with self._get_connection() as conn:
+            row = conn.execute("""
+                SELECT COUNT(*) AS count,
+                       AVG(feedback_rating) AS avg_rating,
+                       MIN(feedback_rating) AS min_rating,
+                       MAX(feedback_rating) AS max_rating
+                FROM episodes
+                WHERE feedback_rating IS NOT NULL
+            """).fetchone()
+            if row and row["count"] > 0:
+                return {
+                    "count": row["count"],
+                    "avg_rating": round(row["avg_rating"], 2),
+                    "min_rating": row["min_rating"],
+                    "max_rating": row["max_rating"],
+                }
+        return None
+
+    def get_recent_episodes(self, limit: int = 10) -> List[Dict]:
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                """
+                SELECT id, filepath, timestamp, status, duration, feedback_rating, summary
+                FROM episodes WHERE status='completed'
+                ORDER BY timestamp DESC LIMIT ?
+            """,
+                (limit,),
+            ).fetchall()
+            return [dict(r) for r in rows]

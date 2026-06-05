@@ -6,8 +6,10 @@ import re
 
 import pandas as pd
 
+from governance_skills.profiling import _DF_CACHE
+
 # Simple cache for the DataFrame
-_DF_CACHE = {}
+# _DF_CACHE = {}  <- Removed to use the one from profiling.py
 
 
 def _get_df(filepath: str) -> pd.DataFrame:
@@ -17,27 +19,24 @@ def _get_df(filepath: str) -> pd.DataFrame:
     return _DF_CACHE[filepath]
 
 
-def validate_column(filepath: str, column_name: str, validation_type: str) -> dict:
+def validate_column(
+    filepath: str,
+    column_name: str,
+    validation_type: str,
+    df: pd.DataFrame | None = None,  # IMPROVEMENT: skip file re-read
+) -> dict:
     """
     Comprehensive validation of an entire column for specific data quality issues.
-
-    Args:
-        filepath: Path to CSV file
-        column_name: Name of column to validate
-        validation_type: One of "email", "phone", "duplicates", "null_check"
-
-    Returns:
-        dict with validation results and all violations listed with row numbers
     """
     try:
-        df = _get_df(filepath)
+        frame = df if df is not None else _get_df(filepath)
     except Exception as e:
         return {"error": str(e)}
 
-    if column_name not in df.columns:
+    if column_name not in frame.columns:
         return {"error": f"Column '{column_name}' not found in file."}
 
-    col = df[column_name]
+    col = frame[column_name]
     results = {
         "column_name": column_name,
         "validation_type": validation_type,
@@ -58,10 +57,14 @@ def validate_column(filepath: str, column_name: str, validation_type: str) -> di
     return {"error": f"Unknown validation_type: {validation_type}"}
 
 
+def validate_column_from_df(df, column_name, validation_type):
+    return validate_column("__in_memory__", column_name, validation_type, df=df)
+
+
 def _validate_email(col: pd.Series, results: dict) -> dict:
     """Validate email format with stricter checks."""
     # Stricter regex to ensure domain has at least one character before the dot, and a valid TLD
-    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
 
     # Custom check: ensure domain part doesn't start/end with dot
     def is_valid_format(email):
@@ -124,7 +127,11 @@ def _validate_email(col: pd.Series, results: dict) -> dict:
 
 def _validate_phone(col: pd.Series, results: dict) -> dict:
     """Validate phone format (flexible)."""
-    phone_pattern = r"^[\+]?[\d\s\-\(\)\.]{7,}$"
+    PHONE_RE = re.compile(
+        r"^(\+?\d{1,3}[\s\-.]?)?"
+        r"(\(?\d{2,4}\)?[\s\-.]?)"
+        r"\d{3,4}[\s\-.]?\d{4}$"
+    )
 
     invalid_phones = []
     valid_phones = []
@@ -135,7 +142,13 @@ def _validate_phone(col: pd.Series, results: dict) -> dict:
 
         value_str = str(value).strip()
 
-        if not re.match(phone_pattern, value_str):
+        # Digit-only fast-path
+        cleaned = re.sub(r"[\s\-().+]", "", value_str)
+        if 7 <= len(cleaned) <= 15 and cleaned.isdigit():
+            valid_phones.append(value_str)
+            continue
+
+        if not PHONE_RE.match(value_str):
             invalid_phones.append(
                 {
                     "row": int(idx) + 1,

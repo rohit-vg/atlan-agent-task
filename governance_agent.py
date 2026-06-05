@@ -15,6 +15,7 @@ import re
 import sys
 import time
 import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from dotenv import load_dotenv
 from google import genai
@@ -32,6 +33,27 @@ from governance_skills import (
 
 # Load environment variables from .env file
 load_dotenv()
+
+MODEL = os.getenv("GOVERNANCE_MODEL", "gemini-3.1-flash-lite")
+MAX_SAMPLE_VALUES = int(os.getenv("MAX_SAMPLE_VALUES", "3"))
+MAX_PROFILING_ITER = int(os.getenv("MAX_PROFILING_ITERATIONS", "30"))
+MAX_VALIDATION_WORKERS = int(os.getenv("MAX_VALIDATION_WORKERS", "4"))
+
+
+def _retry_with_backoff(fn, max_retries=3, base_wait=60):
+    """Retry fn() on 429 with capped exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            return fn()
+        except Exception as e:
+            if "429" in str(e) and attempt < max_retries - 1:
+                wait = min(base_wait * (2**attempt), 300)
+                print(
+                    f"  Rate limit. Retrying in {wait}s ({attempt + 1}/{max_retries})..."
+                )
+                time.sleep(wait)
+            else:
+                raise
 
 
 PROFILING_TOOLS = [
@@ -107,9 +129,10 @@ For duplicates: report separately as business duplicates.
 For every column include:
   name, description, semantic_type, data_type, tags, pii_risk,
   nullable, null_percentage, uniqueness_percentage, sample_values,
-  stats, quality_observations, business_glossary_term, recommended_constraints
+  stats, quality_observations, business_glossary_term, recommended_constraints,
+  quality_score (0-100 integer)
 
-Root object: { "source_file": "<filename>", "total_rows": <int>, "columns": [...] }"""
+Root object: { "source_file": "<filename>", "total_rows": <int>, "columns": [...], "overall_quality_score": <int> }"""
 
 
 class ProfileAgent:
@@ -117,7 +140,7 @@ class ProfileAgent:
 
     def __init__(self):
         self.client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
-        self.model = "gemini-3.1-flash-lite"
+        self.model = MODEL
         self.semantic_memory = SemanticMemory(client=self.client)
         self.episode_store = SQLiteEpisodeStore()
 
@@ -137,6 +160,8 @@ class ProfileAgent:
 
         print("  📊  Profiling columns\n")
         collected = self._run_profiling_phase(episode_id, filepath)
+
+        collected = self._run_parallel_validation(filepath, collected)
 
         catalog = self._run_synthesis_phase(episode_id, filepath, collected)
 
@@ -158,15 +183,78 @@ class ProfileAgent:
 
         return paths
 
+    def _run_parallel_validation(self, filepath: str, collected: dict) -> dict:
+        """
+        Detect columns that still need validation by inspecting sample_values
+        with a regex, then run all validate_column() calls in parallel threads.
+        Skips columns that already have validation_results from the ReAct loop.
+        """
+        profiles = collected.get("column_profiles", {})
+        tasks = []
+        for col_name, prof in profiles.items():
+            if "validation_results" in prof:
+                continue
+            samples = " ".join(str(v) for v in prof.get("sample_values", []))
+            if re.search(r"@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", samples):
+                tasks.append((col_name, "email"))
+            elif re.search(r"\+?[0-9][\s\-().]{6,}", samples):
+                tasks.append((col_name, "phone"))
+
+        if not tasks:
+            return collected
+
+        def _do(col_name, vtype):
+            return col_name, validate_column(filepath, col_name, vtype)
+
+        with ThreadPoolExecutor(max_workers=MAX_VALIDATION_WORKERS) as pool:
+            futures = {pool.submit(_do, col, vtype): col for col, vtype in tasks}
+            for future in as_completed(futures):
+                col_name, result = future.result()
+                result = self._sanitize_result(result)
+                if col_name in profiles:
+                    profiles[col_name]["validation_results"] = result
+
+        collected["column_profiles"] = profiles
+        return collected
+
     def _sanitize_result(self, result):
         """Recursively replace NaN with None in dictionaries/lists for valid JSON."""
-        if isinstance(result, float) and math.isnan(result):
+        if isinstance(result, float) and (math.isnan(result) or math.isinf(result)):
             return None
         elif isinstance(result, dict):
             return {k: self._sanitize_result(v) for k, v in result.items()}
         elif isinstance(result, list):
             return [self._sanitize_result(i) for i in result]
         return result
+
+    def _safe_json_parse(self, raw: str) -> dict:
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            fixed = re.sub(r",(\s*[}\]])", r"\1", raw)
+            fixed = re.sub(
+                r"([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)", r'\1"\2"\3', fixed
+            )
+            try:
+                return json.loads(fixed)
+            except json.JSONDecodeError as e:
+                print(f"  WARNING JSON parse failed: {e}")
+                # IMPROVEMENT: return partial dict instead of raising RuntimeError
+                return {"parse_error": str(e), "raw_response": raw[:2000]}
+
+    def _get_feedback_context(self) -> str:
+        """Surface historical feedback avg to calibrate synthesis verbosity."""
+        try:
+            stats = self.episode_store.get_feedback_stats()
+            if stats and stats.get("count", 0) > 0:
+                avg = stats["avg_rating"]
+                if avg < 3.0:
+                    return "FEEDBACK CONTEXT: Previous runs averaged LOW quality. Produce MORE DETAILED descriptions.\n\n"
+                if avg >= 4.0:
+                    return "FEEDBACK CONTEXT: Previous runs averaged HIGH quality. Keep descriptions CONCISE.\n\n"
+        except Exception:
+            pass
+        return ""
 
     def _run_profiling_phase(self, episode_id: str, filepath: str) -> dict:
         """Run ReAct tool loop to collect all profiles."""
@@ -269,105 +357,85 @@ class ProfileAgent:
     def _run_synthesis_phase(
         self, episode_id: str, filepath: str, collected: dict
     ) -> dict:
-        """Synthesize final catalog from collected profiles with retry and data pruning."""
-        overview = collected.get("overview", {})
         profiles = collected.get("column_profiles", {})
+        overview = collected.get("overview", {})
 
-        # Prune data to save tokens
-        pruned_profiles = {}
-        for col, profile in profiles.items():
-            pruned_profile = profile.copy()
-            if "sample_values" in pruned_profile:
-                # Keep only first 3 samples
-                pruned_profile["sample_values"] = pruned_profile["sample_values"][:3]
-            pruned_profiles[col] = pruned_profile
+        pruned = {
+            col: {
+                **prof,
+                "sample_values": prof.get("sample_values", [])[:MAX_SAMPLE_VALUES],
+            }
+            for col, prof in profiles.items()
+        }
 
-        mandatory_facts = "VALIDATION FACTS (from automated scanning tool):\n\n"
-        for col_name, profile in profiles.items():
-            if "validation_results" in profile:
-                val_result = profile["validation_results"]
-                val_type = val_result.get("validation_type", "")
-
-                if val_type == "email":
-                    invalid_count = val_result.get("invalid_emails_count", 0)
-                    duplicate_count = val_result.get("duplicate_valid_emails_count", 0)
-                    valid_count = val_result.get("valid_emails_count", 0)
-
-                    mandatory_facts += f"{col_name.upper()}:\n"
-                    if invalid_count > 0:
-                        invalid_vals = val_result.get("invalid_emails", [])
-                        mandatory_facts += (
-                            f"  ❌ INVALID EMAILS: {invalid_count} entries\n"
-                        )
-                        mandatory_facts += f"     Examples: {invalid_vals[:3]}\n"
-                    else:
-                        mandatory_facts += f"  ✅ All emails valid\n"
-                    mandatory_facts += f"  ✅ Valid unique: {valid_count}\n"
-                    mandatory_facts += f"  ✅ Valid duplicates: {duplicate_count}\n\n"
-
-        # Query semantic memory for relevant rules
-        relevant_rules = []
-        for col_name, profile in profiles.items():
-            query_str = f"Profiling column {col_name} with sample values {profile.get('sample_values', [])[:3]}"
-            rules = self.semantic_memory.query_rules(query_str, limit=2)
-            relevant_rules.extend([r["text"] for r in rules])
-
-        # Remove duplicates
-        relevant_rules = list(set(relevant_rules))
-        rules_text = "\n".join([f"- {r}" for r in relevant_rules])
+        mandatory_facts = self._build_validation_facts(profiles)
+        relevant_rules = self._gather_governance_rules(profiles)
+        rules_text = (
+            "\n".join(f"- {r}" for r in relevant_rules) or "No specific rules found."
+        )
+        feedback_ctx = self._get_feedback_context()
 
         user_msg = (
             f"Source file: {filepath}\n"
             f"Dataset shape: {overview.get('shape', 'unknown')}\n\n"
             f"{mandatory_facts}\n"
-            f"Column profiles (pruned):\n{json.dumps(pruned_profiles, indent=2, default=str)}\n\n"
-            f"GOVERNANCE GUIDELINES (Use these for catalog synthesis):\n{rules_text}\n\n"
+            f"Column profiles (pruned):\n{json.dumps(pruned, indent=2, default=str)}\n\n"
+            f"GOVERNANCE GUIDELINES:\n{rules_text}\n\n"
+            f"{feedback_ctx}"
             f"CRITICAL INSTRUCTIONS:\n"
             f"1. Use validation facts above for data quality observations\n"
-            f"2. If validation shows invalid values, include in quality_observations\n"
-            f"3. Add validation-based constraints (e.g., VALID_EMAIL for email columns)\n"
-            f"4. Do NOT re-validate - trust the automated tool results"
+            f"2. Include a quality_score (0-100) per column and overall_quality_score\n"
+            f"3. Add validation-based recommended_constraints\n"
+            f"4. Do NOT re-validate -- trust the automated tool results"
         )
 
-        print("  🧠  Synthesising catalog (with retry logic)…")
-
-        # Retry logic for 429 Rate Limit
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                response = self.client.models.generate_content(
-                    model=self.model,
-                    contents=user_msg,
-                    config=types.GenerateContentConfig(
-                        system_instruction=SYNTHESIS_SYSTEM,
-                    ),
-                )
-                break
-            except Exception as e:
-                if "429" in str(e) and attempt < max_retries - 1:
-                    wait_time = 60  # * (attempt + 1) This is the requests per min limit, so waiting for a min instead of exponentially backing off.
-                    print(f"  ⚠️  Rate limit hit. Retrying in {wait_time}s...")
-                    time.sleep(wait_time)
-                    continue
-                raise
+        print("  🧠  Synthesising catalog...")
+        response = _retry_with_backoff(
+            lambda: self.client.models.generate_content(
+                model=self.model,
+                contents=user_msg,
+                config=types.GenerateContentConfig(system_instruction=SYNTHESIS_SYSTEM),
+            )
+        )
 
         raw = response.text.strip()
         raw = re.sub(r"^```(?:json)?\s*", "", raw)
         raw = re.sub(r"\s*```$", "", raw)
+        return self._safe_json_parse(raw)
 
-        try:
-            return json.loads(raw)
-        except json.JSONDecodeError as e:
-            fixed = raw
-            fixed = re.sub(r",(\s*[}\]])", r"\1", fixed)
-            fixed = re.sub(
-                r"([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)", r'\1"\2"\3', fixed
+    def _build_validation_facts(self, profiles: dict) -> str:
+        lines = ["VALIDATION FACTS (from automated scanning tool):\n"]
+        for col_name, profile in profiles.items():
+            vr = profile.get("validation_results")
+            if not vr:
+                continue
+            vtype = vr.get("validation_type", "")
+            lines.append(f"{col_name.upper()}:")
+            if vtype == "email":
+                lines.append(
+                    f"  Invalid: {vr.get('invalid_emails_count', 0)} | "
+                    f"Valid: {vr.get('valid_emails_count', 0)} | "
+                    f"Duplicates: {vr.get('duplicate_valid_emails_count', 0)}"
+                )
+                if vr.get("invalid_emails_count", 0):
+                    lines.append(f"     Examples: {vr.get('invalid_emails', [])[:3]}")
+            elif vtype == "phone":
+                lines.append(f"  Invalid phones: {vr.get('invalid_phones_count', 0)}")
+            elif vtype == "duplicates":
+                lines.append(f"  Duplicates: {vr.get('issues_found', 0)}")
+            elif vtype == "null_check":
+                lines.append(f"  Nulls: {vr.get('null_count', 0)}")
+            lines.append("")
+        return "\n".join(lines)
+
+    def _gather_governance_rules(self, profiles: dict) -> list:
+        rules = []
+        for col_name, profile in profiles.items():
+            q = f"Profiling column {col_name} with sample values {profile.get('sample_values', [])[:3]}"
+            rules.extend(
+                r["text"] for r in self.semantic_memory.query_rules(q, limit=2)
             )
-
-            try:
-                return json.loads(fixed)
-            except json.JSONDecodeError as e2:
-                raise RuntimeError(f"Failed to parse catalog JSON: {e2}")
+        return list(set(rules))
 
     def _dispatch(self, name: str, inputs: dict):
         """Dispatch tool calls to their implementations."""
